@@ -174,7 +174,23 @@ $(document).ready(function() {
 			$('#entries').empty();
 			getHeadlines();
 		});
-			
+	});
+
+	// Logout
+	$('#menu-logout').unbind('click').click(function() {
+		var data = new Object();
+		data.op = "logout";
+		var request = apiCall(data);
+
+		request.done(function(response) {
+			$.removeCookie('g2tt_feed');
+			$.removeCookie('g2tt_isCat');
+			$.removeCookie('g2tt_viewMode');
+			$.removeCookie('g2tt_textType');
+			$.removeCookie('g2tt_orderBy');
+			$.removeCookie('g2tt_sid');
+			location.reload(true);
+		});
 	});
 
 
@@ -495,7 +511,6 @@ function getData() {
 		$('.login').removeClass('hidden');
 	} else {
 		getHeadlines();
-
 	}
 }
 
