@@ -141,7 +141,7 @@ $(document).ready(function() {
 		$('#feed').addClass('hidden');
 		$('#subscriptions').removeClass('hidden');
 		$('.back-to-feeds').addClass('hidden');
-		$('.g2tt-menu').children().toggle('hidden');
+		$('.g2tt-menu').children().not('#seperator4, #menu-logout').toggle('hidden');
 		getTopCategories();
 	});
 
