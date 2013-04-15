@@ -1,3 +1,6 @@
+// Config
+global_ttrssUrl = "/tt-rss/";
+
 // Preferences
 pref_Feed = "-4"; // Default: all items
 pref_IsCat = false;
@@ -50,12 +53,7 @@ $(document).ready(function() {
 
 		$inputs.prop("disabled",true);
 
-		var request = $.ajax({
-			url: "../api/",
-			type: "post",
-			dataType: "json",
-			data: JSON.stringify(data),
-		});
+		var request = apiCall(data);
 
 		request.done(function (response, textStatus, jqXHR) {
 			console.log(response['content']);
@@ -192,8 +190,6 @@ $(document).ready(function() {
 			location.reload(true);
 		});
 	});
-
-
 });
 
 function apiCall(data,asynch) {
@@ -201,7 +197,7 @@ function apiCall(data,asynch) {
 	data.sid = $.cookie('g2tt_sid');
 	data = JSON.stringify(data);
 	var request = $.ajax({
-		url: "../api/",
+		url: global_ttrssUrl+"/api/",
 		type: "post",
 		dataType: "json",
 		data: data,
