@@ -1,5 +1,5 @@
 // Config
-global_ttrssUrl = "/tt-rss/";
+global_ttrssUrl = "/tt-rss";
 
 // Preferences
 pref_Feed = "-4"; // Default: all items
