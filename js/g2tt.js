@@ -1,5 +1,5 @@
 // Config
-global_ttrssUrl = "/tt-rss";
+global_ttrssUrl = "/tt-rss/";
 
 // Preferences
 pref_Feed = "-4"; // Default: all items
@@ -190,6 +190,11 @@ $(document).ready(function() {
 			location.reload(true);
 		});
 	});
+
+	// Search
+	$('#menu-search').unbind('click').click(function() {
+	});
+
 });
 
 function apiCall(data,asynch) {
@@ -228,6 +233,11 @@ function getHeadlines(since) {
 	var headlines = apiCall(data);
 	
 	headlines.done(function (response, textStatus, jqXHR) {
+        if(response['status'] != 0) {
+			$.removeCookie('g2tt_sid');
+            getData();
+            return;
+        }
 		headlines = response['content'];
 		$.each(headlines, function(index,headline) {
 			global_ids += headline.id + ",";
