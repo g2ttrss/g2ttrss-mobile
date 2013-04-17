@@ -161,6 +161,8 @@ $(document).ready(function() {
 
 	// Mark all as read
 	$('#mark-these-read, #menu-mark-read').unbind('click').click(function() {
+	    $('body').removeClass('loaded').addClass('loading');
+	    $('.load-more-message').html('Marking as read...');
 		var data = new Object();
 		data.op = "updateArticle";
 		data.article_ids = global_ids;
