@@ -243,6 +243,9 @@ function getHeadlines(since) {
         headlines = response['content'];
         $.each(headlines, function (index, headline) {
             global_ids += headline.id + ",";
+            var email_subject = headline.title;
+            var email_body = '<br><h4>Sent to you via tt-rss</h4><h2><a href="' + headline.link + '">' + headline.title + '</a></h2>' + headline.content;
+            
             var date = new Date(headline.updated * 1000);
             var entry = "<div id='" + headline.id + "' class='entry-row whisper" + ((!headline.unread) ? " read" : "") + "'> \
             <div class='entry-container'> \
@@ -280,6 +283,9 @@ function getHeadlines(since) {
             <div class='entry-actions'> \
             <div class='entry-actions-primary'> \
             <span class='read-state-unread read-state link unselectable' title='Mark as read'>Mark as read</span> \
+            <span class='email link unselectable' title='Sent by mail'> \
+            <a class='link unselectable' href='mailto:?subject=" + encodeURIComponent(email_subject) + "&body=" + encodeURIComponent(email_body) + "'>E-Mail</a> \
+            </span> \
             <wbr /> \
             </div> \
             </div> \
