@@ -15,7 +15,7 @@ if (typeof ($.cookie('g2tt_orderBy')) !== 'undefined') {
 }
 
 global_backCat = []; // Feed view always starts with all items
-global_ids = ""; // List of all article IDs currently displayed
+global_ids = []; // List of all article IDs currently displayed
 
 $(document).ready(function () {
     $('html').unbind('click').click(function () {
@@ -156,7 +156,7 @@ $(document).ready(function () {
         $('.load-more-message').html('Marking as read...');
         var data = new Object();
         data.op = "updateArticle";
-        data.article_ids = global_ids;
+        data.article_ids = global_ids.join(',');
         data.mode = 0;
         data.field = 2;
         var request = apiCall(data);
@@ -232,7 +232,7 @@ function getHeadlines(since) {
         }
         headlines = response['content'];
         $.each(headlines, function (index, headline) {
-            global_ids += headline.id + ",";
+            global_ids.push(headline.id);
             var email_subject = headline.title;
             var email_body = '<br><h4>Sent to you via tt-rss</h4><h2><a href="' + headline.link + '">' + headline.title + '</a></h2>' + headline.content;
             
@@ -324,6 +324,16 @@ function getHeadlines(since) {
         $('.read-state').unbind('click').click(function () {
             $(this).closest('.entry-row').toggleClass('read');
             $(this).toggleClass('read-state-read').toggleClass('read-state-unread');
+
+            if ($(this).hasClass('read-state-unread')) {
+                for (var i = 0; i < global_ids.length; i++) {
+                    if (global_ids[i] == $(this).closest('.entry-row').attr('id')) {
+                        global_ids.splice(i,1);
+                    }
+                }
+            } else {
+                global_ids.push($(this).closest('.entry-row').attr('id'));
+            }
 
             var data = new Object();
             data.op = "updateArticle";
