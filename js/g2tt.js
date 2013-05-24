@@ -426,7 +426,9 @@ function getTopCategories() {
             cats = response['content'];
 
             cats.sort(function (a, b) {
-                return ((a.order_id < b.order_id) ? -1 : ((a.order_id > b.order_id) ? 1 : 0));
+                var db_order = ((a.order_id < b.order_id) ? -1 : ((a.order_id > b.order_id) ? 1 : 0));
+                var alpha_order = ((a.title < b.title) ? -1 : ((a.title > b.title) ? 1 : 0));
+                return (db_order || alpha_order);
             });
             $.each(cats, function (index, cat) {
                 var entry = "<div class='row whisper sub-row closed-sub-folder" + ((cat.unread > 0) ? " unread-sub" : " no-unread-sub-row") + " nested-sub' id='tree-item-" + cat.id + "'> \
