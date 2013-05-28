@@ -126,14 +126,13 @@ $(document).ready(function () {
     });
 
     // Back to Feeds
-    var backToFeeds = function () {
+    $('.back-to-feeds').unbind('click').click(function () {
         $('#feed').addClass('hidden');
         $('#subscriptions').removeClass('hidden');
         $('.back-to-feeds').addClass('hidden');
         $('.g2tt-menu').children().not('#seperator4, #menu-logout').toggle('hidden');
         getTopCategories();
-    };
-    $('.back-to-feeds').unbind('click').click(backToFeeds);
+    });
 
     // View mode feeds menu selection
     $('#feeds-' + pref_ViewMode).addClass('g2tt-option-selected');
@@ -165,20 +164,6 @@ $(document).ready(function () {
         request.done(function (response) {
             $('#entries').empty();
             getHeadlines();
-        });
-    });
-
-    // Unsubscribe
-    $('#menu-unsubscribe').unbind('click').click(function () {
-        $('#unsubscribe-message').removeClass('hidden');
-        var data = new Object();
-        data.op = "unsubscribeFeed";
-        data.feed_id = pref_Feed;
-        var request = apiCall(data);
-
-        request.done(function (response) {
-          $('#unsubscribe-message').addClass('hidden');
-          backToFeeds();
         });
     });
 
@@ -246,6 +231,13 @@ function getHeadlines(since) {
             return;
         }
         headlines = response['content'];
+
+        // API isn't returning them in the requested sort order, so sort manually.
+        var order_by = (pref_OrderBy == "date_reverse" ? 1 : -1);
+        headlines.sort(function (a, b) {
+          return order_by * ((a.updated < b.updated) ? -1 : ((a.updated > b.updated) ? 1 : 0));
+        });
+
         $.each(headlines, function (index, headline) {
             global_ids.push(headline.id);
             var email_subject = headline.title;
