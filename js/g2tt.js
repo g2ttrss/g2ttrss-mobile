@@ -233,10 +233,12 @@ function getHeadlines(since) {
         headlines = response['content'];
 
         // API isn't returning them in the requested sort order, so sort manually.
-        var order_by = (pref_OrderBy == "date_reverse" ? 1 : -1);
-        headlines.sort(function (a, b) {
-          return order_by * ((a.updated < b.updated) ? -1 : ((a.updated > b.updated) ? 1 : 0));
-        });
+// This sorting makes the article IDs out of oder which breaks some logic around getting
+//the next articles, commenting out for now
+//        var order_by = (pref_OrderBy == "date_reverse" ? 1 : -1);
+//        headlines.sort(function (a, b) {
+//          return order_by * ((a.updated < b.updated) ? -1 : ((a.updated > b.updated) ? 1 : 0));
+//        });
 
         $.each(headlines, function (index, headline) {
             global_ids.push(headline.id);
