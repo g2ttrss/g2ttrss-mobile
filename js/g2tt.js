@@ -79,7 +79,11 @@ $(document).ready(function () {
 
     // Show more items
     $('#show-more-row').unbind('click').click(function () {
-        var last = $('.entry-row').last().attr('id');
+        if(pref_OrderBy == "date_reverse") {
+            var last = $('.entry-row').last().attr('id');
+        } else {
+            var last = $('.entry-row').length;
+        }
         getHeadlines(last);
     });
 
@@ -221,7 +225,11 @@ function getHeadlines(since) {
     data.is_cat = pref_IsCat;
     data.include_nested = true;
     data.order_by = pref_OrderBy;
-    data.since_id = since;
+    if (pref_OrderBy == "date_reverse") {
+        data.since_id = since;
+    } else {
+        data.skip = since;
+    }
     var headlines = apiCall(data);
 
     headlines.done(function (response, textStatus, jqXHR) {
