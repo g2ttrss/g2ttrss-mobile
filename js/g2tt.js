@@ -130,13 +130,14 @@ $(document).ready(function () {
     });
 
     // Back to Feeds
-    $('.back-to-feeds').unbind('click').click(function () {
+    var backToFeeds = function () {
         $('#feed').addClass('hidden');
         $('#subscriptions').removeClass('hidden');
         $('.back-to-feeds').addClass('hidden');
         $('.g2tt-menu').children().not('#seperator4, #menu-logout').toggle('hidden');
         getTopCategories();
-    });
+    };
+    $('.back-to-feeds').unbind('click').click(backToFeeds);
 
     // View mode feeds menu selection
     $('#feeds-' + pref_ViewMode).addClass('g2tt-option-selected');
@@ -168,6 +169,20 @@ $(document).ready(function () {
         request.done(function (response) {
             $('#entries').empty();
             getHeadlines();
+        });
+    });
+
+    // Unsubscribe
+    $('#menu-unsubscribe').unbind('click').click(function () {
+        $('#unsubscribe-message').removeClass('hidden');
+        var data = new Object();
+        data.op = "unsubscribeFeed";
+        data.feed_id = pref_Feed;
+        var request = apiCall(data);
+
+        request.done(function (response) {
+          $('#unsubscribe-message').addClass('hidden');
+          backToFeeds();
         });
     });
 
