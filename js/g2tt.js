@@ -248,6 +248,11 @@ function getHeadlines(since) {
 //          return order_by * ((a.updated < b.updated) ? -1 : ((a.updated > b.updated) ? 1 : 0));
 //        });
 
+        if (headlines.length != data.limit) {
+            $('#show-more-row').hide();
+        } else {
+            $('#show-more-row').show();
+        }
         $.each(headlines, function (index, headline) {
             global_ids.push(headline.id);
             var email_subject = headline.title;
