@@ -409,7 +409,7 @@ function getTopCategories() {
         <div class='icon-cell'> \
         <div class='icon'></div> \
         </div> \
-        <div class='text sub-item'>All items</div> \
+        <div class='text sub-item'>All articles</div> \
         <div class='item-count larger whisper'> \
         <span class='item-count-value' id='tree-item--4-unread-count'>" + unread + "</span> \
         </div> \
@@ -548,12 +548,37 @@ function getFeeds(parent_id, parent_title, parent_unread) {
     }
 }
 
+function getTitle() {
+    var data = new Object();
+    if (pref_IsCat == "true") {
+        data.op = "getCategories";
+    } else {
+        data.op = "getFeeds";
+        data.cat_id = "-4";
+    }
+       
+    var request = apiCall(data);
+        
+    request.done(function (response, textStatus, jqXHR) {
+        items = response['content'];
+
+        $.each(items, function (index, item) {
+            if (item.id == pref_Feed) {
+                $('#nav-title').html(item.title);
+                exit();
+            }
+        });
+    });
+}
+
+
 
 function getData() {
     if (typeof ($.cookie('g2tt_sid')) === 'undefined') {
         $('#main').addClass('hidden');
         $('.login').removeClass('hidden');
     } else {
+        getTitle();
         getHeadlines();
     }
 }
