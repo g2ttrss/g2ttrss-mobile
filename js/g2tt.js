@@ -384,6 +384,7 @@ function getHeadlines(since) {
 }
 
 function getTopCategories() {
+    $('#nav-title').html('');
     $('#sub-list-back').addClass('hidden');
     if ($('#sub--4').length != 0) {
         $('#subscriptions-list').children().addClass('hidden');
@@ -470,6 +471,7 @@ function getFeeds(parent_id, parent_title, parent_unread) {
         getTopCategories();
         return;
     }
+    $('#nav-title').html('');
     $('#sub-list-back').removeClass('hidden');
     if ($('#sub-' + parent_id).length != 0) {
         $('#subscriptions-list').children().addClass('hidden');
