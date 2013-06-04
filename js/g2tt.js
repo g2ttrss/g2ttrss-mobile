@@ -567,7 +567,7 @@ function getTitle() {
         $.each(items, function (index, item) {
             if (item.id == pref_Feed) {
                 $('#nav-title').html(item.title);
-                exit();
+                return;
             }
         });
     });
