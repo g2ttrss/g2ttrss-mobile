@@ -158,6 +158,8 @@ $(document).ready(function () {
     $('#mark-these-read, #menu-mark-read').unbind('click').click(function () {
         $('body').removeClass('loaded').addClass('loading');
         $('.load-more-message').html('Marking as read...');
+        //remove those that need to be kept unread
+        keepUnread.removeFromArray(global_ids);
         var data = new Object();
         data.op = "updateArticle";
         data.article_ids = global_ids.join(',');
@@ -349,12 +351,16 @@ function getHeadlines(since) {
 
             if ($(this).hasClass('read-state-unread')) {
                 for (var i = 0; i < global_ids.length; i++) {
-                    if (global_ids[i] == $(this).closest('.entry-row').attr('id')) {
+                    var articleId = $(this).closest('.entry-row').attr('id');
+                    if (global_ids[i] == articleId) {
                         global_ids.splice(i,1);
+                        keepUnread.addId(articleId);
                     }
                 }
             } else {
-                global_ids.push($(this).closest('.entry-row').attr('id'));
+                var articleId = $(this).closest('.entry-row').attr('id');
+                global_ids.push(articleId);
+                keepUnread.removeId(articleId);
             }
 
             var data = new Object();
@@ -380,6 +386,7 @@ function getHeadlines(since) {
         $('body').removeClass('loading').addClass('loaded');
         $('.load-more-message').html('Load more items...');
         $('.entries-count').html('Showing ' + $('.entry-row').length + ' items');
+        keepUnread.clean(global_ids);
     });
 }
 
@@ -583,4 +590,75 @@ function getData() {
         getTitle();
         getHeadlines();
     }
+}
+
+var keepUnread = new function() {
+    var COOKIE_NAME = 'g2tt_keepUnread_ids';
+    this.keepUnreadIdMap = undefined;
+
+    this.hasId = function (ids, articleId) {
+        return true == getIdMap[articleId];
+    };
+    this.removeId = function (articleId) {
+        delete getIdMap()[articleId];
+    };
+    this.addId = function (articleId) {
+        getIdMap()[articleId] = true;
+        this.save();
+    };
+    this.clean = function (ids) {
+        //check that global_keepUnread_ids does not contain items which are no longer in global_ids
+        var keepUnreadIds = getIdMap();
+        if (ids.length > 0) {
+            for (var id in keepUnreadIds) {
+                id = id|0;//id must be numeric
+                if ($.inArray(id, ids) < 0) {
+                    this.removeId(id);
+                }
+            }
+        }
+        this.save();
+    };
+
+    var getIdMap = function () {
+        if (undefined == this.keepUnreadIdMap) {
+            //attempt to load from cookie
+            this.keepUnreadIdMap = [];
+            var savedKeepUnread_ids;
+            if (typeof ($.cookie(COOKIE_NAME)) !== 'undefined') {
+                savedKeepUnread_ids = $.cookie(COOKIE_NAME); 
+            }
+            
+            if (savedKeepUnread_ids && savedKeepUnread_ids.length > 0) {
+                var idList = savedKeepUnread_ids.split(',');
+                for (var i=0; i < idList.length; i++) {
+                    this.keepUnreadIdMap[idList[i]] = true;
+                }
+            }
+        }
+        return this.keepUnreadIdMap;
+    };
+
+    /*given array of ids, remove all that need to be kept unread*/
+    this.removeFromArray = function (ids) {
+        var keepUnreadIds = getIdMap();
+        for (var id in keepUnreadIds) {
+            id = id|0;//id must be numeric
+            var index = $.inArray(id, ids);
+            if ( index >= 0) {
+                ids.splice(index, 1);
+            }
+        }
+    };
+    this.save = function () {
+        var strVal = '';
+        var keepIdMap = getIdMap();
+        for (articleId in keepIdMap) {
+            if (strVal.length > 0) {
+                strVal += ',';
+            }
+            strVal += articleId;
+        }
+        $.cookie(COOKIE_NAME, strVal);
+    };
 }
