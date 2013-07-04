@@ -55,7 +55,7 @@ $(document).ready(function () {
             });
             $('.login').addClass('hidden');
             $('#main').removeClass('hidden');
-            getData();
+            load();
         });
 
         // callback handler that will be called on failure
@@ -77,7 +77,6 @@ $(document).ready(function () {
         event.preventDefault();
     });
 
-    getData();
 
 
     // Show more items
@@ -114,10 +113,10 @@ $(document).ready(function () {
         $.cookie('g2tt_viewMode', pref_ViewMode);
         $('.showItem').removeClass('g2tt-option-selected');
         $(this).addClass('g2tt-option-selected');
-        $('#entries').empty();
         $('.feedsItem').removeClass('g2tt-option-selected');
-        $('#feeds-' + $(this).attr('id')).addClass('g2tt-option-selected');
-        $('#subscriptions').removeClass().addClass('show-' + $(this).attr('id'));
+        $('#feeds-' + pref_ViewMode).addClass('g2tt-option-selected');
+        $('#entries').empty();
+        $('#subscriptions').attr('class', 'hidden show-' + pref_ViewMode);
         getHeadlines();
     });
 
@@ -134,11 +133,7 @@ $(document).ready(function () {
 
     // Back to Feeds
     $('.back-to-feeds').unbind('click').click(function () {
-        $('#feed').addClass('hidden');
-        $('#subscriptions').removeClass('hidden');
-        $('.back-to-feeds').addClass('hidden');
-        $('.g2tt-menu').children().not('#seperator4, #menu-logout').toggle('hidden');
-        getTopCategories();
+        showFeeds();
     });
 
     // View mode feeds menu selection
@@ -149,7 +144,9 @@ $(document).ready(function () {
         $.cookie('g2tt_viewMode', pref_ViewMode);
         $('.feedsItem').removeClass('g2tt-option-selected');
         $(this).addClass('g2tt-option-selected');
-        $('#subscriptions').removeClass().addClass('show-' + $(this).attr('id').substring(6));
+        $('.showItem').removeClass('g2tt-option-selected');
+        $('#' + pref_ViewMode).addClass('g2tt-option-selected');
+        $('#subscriptions').attr('class', 'show-' + $(this).attr('id').substring(6));
     });
 
     // Sort feeds A-Z
@@ -210,7 +207,29 @@ $(document).ready(function () {
     // Search
     $('#menu-search').unbind('click').click(function () {});
 
+    load();
 });
+
+function showFeeds() {
+    $('#feed').addClass('hidden');
+    $('#subscriptions').removeClass('hidden');
+    $('.back-to-feeds').addClass('hidden');
+    $('.articlesMenu').addClass('hidden');
+    $('.feedsMenu').removeClass('hidden');
+    if ($('#nav-title').html() != 'All articles') {
+        $('#sub-list-back').removeClass('hidden');
+    }
+    $('#nav-title').html('');
+}
+
+function showArticles() {
+    $('#feed').removeClass('hidden');
+    $('#subscriptions').addClass('hidden');
+    $('.back-to-feeds').removeClass('hidden');
+    $('.articlesMenu').removeClass('hidden');
+    $('.feedsMenu').addClass('hidden');
+    $('#sub-list-back').addClass('hidden');
+}
 
 function apiCall(data, asynch) {
     if (typeof (asynch) === 'undefined') asynch = true;
@@ -258,14 +277,6 @@ function getHeadlines(since) {
             return;
         }
         headlines = response['content'];
-
-        // API isn't returning them in the requested sort order, so sort manually.
-// This sorting makes the article IDs out of oder which breaks some logic around getting
-//the next articles, commenting out for now
-//        var order_by = (pref_OrderBy == "date_reverse" ? 1 : -1);
-//        headlines.sort(function (a, b) {
-//          return order_by * ((a.updated < b.updated) ? -1 : ((a.updated > b.updated) ? 1 : 0));
-//        });
 
         if (headlines.length != data.limit) {
             $('#show-more-row').hide();
@@ -442,10 +453,12 @@ function getTopCategories() {
 
             $('#sub--4').prepend(entry);
 
-            $('.open-sub-folder').unbind('click').click(function () {
+            $('#tree-item--4').unbind('click').click(function () {
                 $.cookie('g2tt_feed', $(this).attr('id').substring(10));
                 $.cookie('g2tt_isCat', false);
-                location.reload(true);
+                pref_Feed = $.cookie('g2tt_feed');
+                pref_IsCat = $.cookie('g2tt_isCat');
+                getData();
             });
         });
 
@@ -564,16 +577,20 @@ function getFeeds(parent_id, parent_title, parent_unread) {
                 getFeeds($(this).attr('id').substring(10), $(this).find('.sub-item').html(), $(this).find('.item-count-value').html());
             });
 
-            $('.open-sub-folder').unbind('click').click(function () {
+            $('.open-sub-folder[id!="tree-item--4"]').unbind('click').click(function () {
                 $.cookie('g2tt_feed', $(this).attr('id').substring(10));
                 $.cookie('g2tt_isCat', true);
-                location.reload(true);
+                pref_Feed = $.cookie('g2tt_feed');
+                pref_IsCat = $.cookie('g2tt_isCat');
+                getData();
             });
 
             $('.sub').unbind('click').click(function () {
                 $.cookie('g2tt_feed', $(this).attr('id').substring(10));
                 $.cookie('g2tt_isCat', false);
-                location.reload(true);
+                pref_Feed = $.cookie('g2tt_feed');
+                pref_IsCat = $.cookie('g2tt_isCat');
+                getData();
             });
 
             // Done loading
@@ -606,16 +623,27 @@ function getTitle() {
     });
 }
 
-
-
-function getData() {
-    if (typeof ($.cookie('g2tt_sid')) === 'undefined') {
+function load() {
+   if (typeof ($.cookie('g2tt_sid')) === 'undefined') {
         $('#main').addClass('hidden');
         $('.login').removeClass('hidden');
+    } else if (pref_StartInCat == '1') {
+        showFeeds();
+        getTopCategories();
     } else {
         getTitle();
         getHeadlines();
+        getTopCategories();
     }
+} 
+
+function getData() {
+    showArticles();
+    $('body').removeClass('loaded').addClass('loading');
+    $('.load-more-message').html('Marking as read...');
+    $('#entries').empty();
+    getTitle();
+    getHeadlines();
 }
 
 var keepUnread = new function() {
