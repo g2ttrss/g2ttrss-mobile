@@ -13,6 +13,9 @@ if (typeof ($.cookie('g2tt_textType')) !== 'undefined') {
 if (typeof ($.cookie('g2tt_orderBy')) !== 'undefined') {
     pref_OrderBy = $.cookie('g2tt_orderBy');
 }
+if (typeof ($.cookie('g2tt_feedSort')) !== 'undefined') {
+    pref_FeedSort = $.cookie('g2tt_feedSort');
+}
 
 global_backCat = []; // Feed view always starts with all items
 global_ids = []; // List of all article IDs currently displayed
@@ -147,6 +150,20 @@ $(document).ready(function () {
         $('.feedsItem').removeClass('g2tt-option-selected');
         $(this).addClass('g2tt-option-selected');
         $('#subscriptions').removeClass().addClass('show-' + $(this).attr('id').substring(6));
+    });
+
+    // Sort feeds A-Z
+    if(pref_FeedSort == '1') {
+        $('.feedsSort').addClass('g2tt-option-selected');
+    }
+    $('.feedsSort').unbind('click').click(function () {
+        if(pref_FeedSort == '1') {
+            pref_FeedSort = '0';
+        } else {
+            pref_FeedSort = '1';
+        }
+        $.cookie('g2tt_feedSort', pref_FeedSort);
+        $(this).toggle('g2tt-option-selected');
     });
 
     // Back to Feeds from sub category
@@ -443,7 +460,11 @@ function getTopCategories() {
             cats.sort(function (a, b) {
                 var db_order = ((a.order_id < b.order_id) ? -1 : ((a.order_id > b.order_id) ? 1 : 0));
                 var alpha_order = ((a.title < b.title) ? -1 : ((a.title > b.title) ? 1 : 0));
-                return (db_order || alpha_order);
+                if (pref_FeedSort == '1') {
+                    return alpha_order;
+                } else {
+                    return db_order;
+                }
             });
             $.each(cats, function (index, cat) {
                 var entry = "<div class='row whisper sub-row closed-sub-folder" + ((cat.unread > 0) ? " unread-sub" : " no-unread-sub-row") + " nested-sub' id='tree-item-" + cat.id + "'> \
@@ -501,7 +522,12 @@ function getFeeds(parent_id, parent_title, parent_unread) {
         feeds.done(function (response, textStatus, jqXHR) {
             feeds = response['content'];
             feeds.sort(function (a, b) {
-                return ((a.cat_id < b.cat_id) ? -1 : ((a.cat_id > b.cat_id) ? 1 : 0));
+                var alpha_order = ((a.title < b.title) ? -1 : ((a.title > b.title) ? 1 : 0));
+                if (pref_FeedSort == '1') {
+                    return alpha_order;
+                } else {
+                    return ((a.cat_id < b.cat_id) ? -1 : ((a.cat_id > b.cat_id) ? 1 : 0));
+                }
             });
             $('#subscriptions-list').append("<div id='sub-" + parent_id + "'></div>");
 
