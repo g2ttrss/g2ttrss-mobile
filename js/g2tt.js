@@ -612,6 +612,12 @@ function getData() {
     if (typeof ($.cookie('g2tt_sid')) === 'undefined') {
         $('#main').addClass('hidden');
         $('.login').removeClass('hidden');
+    } else if (pref_StartInCat == '1') {
+        $('#feed').addClass('hidden');
+        $('#subscriptions').removeClass('hidden');
+        $('.back-to-feeds').addClass('hidden');
+        $('.g2tt-menu').children().not('#seperator4, #menu-logout').toggle('hidden');
+        getTopCategories();
     } else {
         getTitle();
         getHeadlines();

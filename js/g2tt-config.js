@@ -8,3 +8,4 @@ pref_ViewMode = 'unread'; // Default: unread articles only
 pref_TextType = "content"; // Default: full articles
 pref_OrderBy = 'date_reverse'; // Default: oldest first
 pref_FeedSort = '0'; // Default: Do not sort feeds
+pref_StartInCat = '0'; // Default: Start showing feeds
