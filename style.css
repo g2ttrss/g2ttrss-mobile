@@ -868,6 +868,11 @@ a:visited,
 .round-box .sq { background-image: none }
 
 /* Added */
+#feed img {
+    max-width: 100%;
+    height: auto;
+}
+
 .entry-contents {
     display: none;
 }
