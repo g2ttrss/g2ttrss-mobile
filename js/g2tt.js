@@ -98,7 +98,7 @@ $(document).ready(function () {
 
     // Refresh button
     $('#header-refresh').unbind('click').click(function () {
-        $(this).toggleClass('m-button-pressed');
+        $(this).addClass('m-button-pressed');
         if ($('#subscriptions').is(':hidden')) {
             location.reload(true);
         }
@@ -134,6 +134,7 @@ $(document).ready(function () {
 
     // Back to Feeds
     $('.back-to-feeds').unbind('click').click(function () {
+        refreshCats();
         showFeeds();
     });
 
@@ -240,7 +241,7 @@ function refreshCats() {
                 $(this).find('.item-count-value').html(feeds[id]['counter']);
             }
         });
-        $('#header-refresh').toggleClass('m-button-pressed');
+        $('#header-refresh').removeClass('m-button-pressed');
     });
 }
 
