@@ -99,11 +99,12 @@ $(document).ready(function () {
     // Refresh button
     $('#header-refresh').unbind('click').click(function () {
         $(this).toggleClass('m-button-pressed');
-        var data = new Object();
-        data.op = "updateFeed";
-        data.feed_id = pref_Feed;
-        apiCall(data, false);
-        location.reload(true);
+        if ($('#subscriptions').is(':hidden')) {
+            location.reload(true);
+        }
+        else {
+            refreshCats();
+        }
     });
 
     // View mode menu selection
@@ -209,6 +210,39 @@ $(document).ready(function () {
 
     load();
 });
+
+function refreshCats() {
+    var data = new Object();
+    data.op = "getCounters";
+    data.output_mode = "fc";
+    var request = apiCall(data);
+
+    request.done(function (response) {
+        var counters = response['content'];
+        var cats = [];
+        var feeds = [];
+        for (var i = 0; i < counters.length; i++) {
+            if (counters[i]['kind'] == 'cat') {
+                cats[counters[i]['id']] = (counters[i]);
+            } else {
+                feeds[counters[i]['id']] = (counters[i]);
+            }
+        }
+        $('.sub-row').each(function (i,j) {
+            var id = $(this).attr('id').substring(10);
+            var is_cat = ($(this).hasClass('open-sub-folder') || $(this).hasClass('closed-sub-folder'));
+
+            if (id == "-4" || id == "-1") {
+                $(this).find('.item-count-value').html(feeds['global-unread']['counter']);
+            } else if (is_cat) {
+                $(this).find('.item-count-value').html(cats[id]['counter']);
+            } else {
+                $(this).find('.item-count-value').html(feeds[id]['counter']);
+            }
+        });
+        $('#header-refresh').toggleClass('m-button-pressed');
+    });
+}
 
 function showFeeds() {
     $('#feed').addClass('hidden');
@@ -612,6 +646,11 @@ function getTitle() {
     var request = apiCall(data);
         
     request.done(function (response, textStatus, jqXHR) {
+        if (response['status'] != 0) {
+            $.removeCookie('g2tt_sid');
+            getData();
+            return;
+        }
         items = response['content'];
 
         $.each(items, function (index, item) {
