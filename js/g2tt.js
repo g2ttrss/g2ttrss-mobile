@@ -279,9 +279,9 @@ function getHeadlines(since) {
         headlines = response['content'];
 
         if (headlines.length != data.limit) {
-            $('#show-more-row').hide();
+            $('.load-more-message').hide();
         } else {
-            $('#show-more-row').show();
+            $('.load-more-message').show();
         }
         $.each(headlines, function (index, headline) {
             global_ids.push(headline.id);
