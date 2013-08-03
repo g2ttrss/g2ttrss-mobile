@@ -92,6 +92,9 @@ $(document).ready(function () {
     // Menu button
     $('#header-menu').unbind('click').click(function (event) {
         $(this).toggleClass('m-button-pressed');
+        //Adjust the placement of the menu based on the height of the Nav bar
+        //(for when category title is long)
+        $('.g2tt-menu').css({top: parseInt($('.nav-bar-container').height()) - 8 + "px"});
         $('.g2tt-menu').toggle();
         event.stopPropagation();
     });
