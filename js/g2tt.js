@@ -238,10 +238,25 @@ function refreshCats() {
 
             if (id == "-4" || id == "-1") {
                 $(this).find('.item-count-value').html(feeds['global-unread']['counter']);
+                if (feeds['global-unread']['counter'] == '0') {
+                    $(this).addClass('no-unread-sub-row').removeClass('unread-sub');
+                } else {
+                    $(this).removeClass('no-unread-sub-row').addClass('unread-sub');
+                }
             } else if (is_cat) {
                 $(this).find('.item-count-value').html(cats[id]['counter']);
+                if (cats[id]['counter'] == '0') {
+                    $(this).addClass('no-unread-sub-row').removeClass('unread-sub');
+                } else {
+                    $(this).removeClass('no-unread-sub-row').addClass('unread-sub');
+                }
             } else {
                 $(this).find('.item-count-value').html(feeds[id]['counter']);
+                if (feeds[id]['counter'] == '0') {
+                    $(this).addClass('no-unread-sub-row').removeClass('unread-sub');
+                } else {
+                    $(this).removeClass('no-unread-sub-row').addClass('unread-sub');
+                }
             }
         });
         $('#header-refresh').removeClass('m-button-pressed');
