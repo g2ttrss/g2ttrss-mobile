@@ -225,6 +225,7 @@ function refreshCats() {
         var counters = response['content'];
         var cats = [];
         var feeds = [];
+
         for (var i = 0; i < counters.length; i++) {
             if (counters[i]['kind'] == 'cat') {
                 cats[counters[i]['id']] = (counters[i]);
@@ -240,8 +241,12 @@ function refreshCats() {
                 $(this).find('.item-count-value').html(feeds['global-unread']['counter']);
                 if (feeds['global-unread']['counter'] == '0') {
                     $(this).addClass('no-unread-sub-row').removeClass('unread-sub');
+                    $('#subscriptions').removeClass('show-unread').addClass('show-all');
                 } else {
                     $(this).removeClass('no-unread-sub-row').addClass('unread-sub');
+                    if (pref_ViewMode == 'unread' && $('subscriptions').hasClass('show-all')) {
+                        $('#subscriptions').removeClass('show-all').addClass('show-unread');
+                    }
                 }
             } else if (is_cat) {
                 $(this).find('.item-count-value').html(cats[id]['counter']);
