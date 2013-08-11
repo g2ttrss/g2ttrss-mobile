@@ -59,19 +59,42 @@ Configuration Options
 Configuration options can be found in the js/g2tt-config.js file. These are options to change your personal preference for how the interface works.
 
 Options:
-* **global_ttrssUrl** (String, default: _("/tt-rss/")_)
+
+* **global_ttrssUrl** (Default: _("/tt-rss/")_)
+
     The path to your TT-RSS installation relative to your domain.
 
 * **pref_Feed** (String, default: _('-4')_, all items)
 
-* **pref_IsCat** (Boolean, default: _(false)_)
+    The default feed to display. Available values:
+    * >0 - A specific feed
+    * 0 - Uncategorized
+    * -1 - Special (e.g. Starred, Published, Archived, etc.)
+    * -2 - Labels
+    * -3 - All feeds, excluding virtual feeds (e.g. Labels and such)
+    * -4 - All feeds, including virtual feeds
 
-* **pref_ViewMode** (String, default: _('unread')_, unread articles only)
+* **pref_ViewMode** (Default: _('unread')_, unread articles only)
 
-* **pref_TextType** (String, default: _('content')_, full articles)
+    Show unread or all articles? Available values:
+    * unread - show unread articles only
+    * all - show all articles
 
-* **pref_OrderBy** (String, default: _('date_reverse')_, oldest first)
+* **pref_OrderBy** (Default: _('date_reverse')_, oldest first)
 
-* **pref_FeedSort** (String, default: _('0')_, do not sort feeds)
+    Sort order of the articles/items. Available values:
+    * date_reverse - oldest first
+    * feed_dates - newest first, goes by feed date
+    * (nothing) - TT-RSS's default (whatever that is)
 
-* **pref_StartInCat** (String, default: _('0')_, start showing feeds)
+* **pref_FeedSort** (Default: _('0')_, do not sort feeds)
+
+    Sort the feeds (categories) in alphabetical order or not. Availables values:
+    * 0 - do not sort feeds, display in the order TT-RSS returns them
+    * 1 - sort the feeds in alphabetical order (A-Z)
+
+* **pref_StartInCat** (Default: _('0')_, start showing articles)
+
+    Start showing the feeds (categories) or articles (items)
+    * 0 - start showing articles
+    * 1 - start showing feeds
