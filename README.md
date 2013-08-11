@@ -52,3 +52,26 @@ Current features
 * load more articles (15 at a time)
 
 Future features are tracked as issues.
+
+Configuration Options
+---------------------
+
+Configuration options can be found in the js/g2tt-config.js file. These are options to change your personal preference for how the interface works.
+
+Options:
+* **global_ttrssUrl** (String, default: _("/tt-rss/")_)
+The path to your TT-RSS installation relative to your domain.
+
+* **pref_Feed** (String, default: _('-4')_, all items)
+
+* **pref_IsCat** (Boolean, default: _(false)_)
+
+* **pref_ViewMode** (String, default: _('unread')_, unread articles only)
+
+* **pref_TextType** (String, default: _('content')_, full articles)
+
+* **pref_OrderBy** (String, default: _('date_reverse')_, oldest first)
+
+* **pref_FeedSort** (String, default: _('0')_, do not sort feeds)
+
+* **pref_StartInCat** (String, default: _('0')_, start showing feeds)
