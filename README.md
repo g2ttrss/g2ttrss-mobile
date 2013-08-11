@@ -60,7 +60,7 @@ Configuration options can be found in the js/g2tt-config.js file. These are opti
 
 Options:
 * **global_ttrssUrl** (String, default: _("/tt-rss/")_)
-The path to your TT-RSS installation relative to your domain.
+    The path to your TT-RSS installation relative to your domain.
 
 * **pref_Feed** (String, default: _('-4')_, all items)
 
