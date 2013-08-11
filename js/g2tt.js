@@ -1,3 +1,5 @@
+pref_IsCat = false;
+
 if (typeof ($.cookie('g2tt_feed')) !== 'undefined') {
     pref_Feed = $.cookie('g2tt_feed');
 }
@@ -7,9 +9,11 @@ if (typeof ($.cookie('g2tt_isCat')) !== 'undefined') {
 if (typeof ($.cookie('g2tt_viewMode')) !== 'undefined') {
     pref_ViewMode = $.cookie('g2tt_viewMode');
 }
+/* Not used
 if (typeof ($.cookie('g2tt_textType')) !== 'undefined') {
     pref_textType = $.cookie('g2tt_textType');
 }
+*/
 if (typeof ($.cookie('g2tt_orderBy')) !== 'undefined') {
     pref_OrderBy = $.cookie('g2tt_orderBy');
 }
@@ -202,7 +206,7 @@ $(document).ready(function () {
             $.removeCookie('g2tt_feed');
             $.removeCookie('g2tt_isCat');
             $.removeCookie('g2tt_viewMode');
-            $.removeCookie('g2tt_textType');
+// Not used            $.removeCookie('g2tt_textType');
             $.removeCookie('g2tt_orderBy');
             $.removeCookie('g2tt_sid');
             location.reload(true);
