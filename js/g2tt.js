@@ -248,7 +248,7 @@ function refreshCats() {
                     $('#subscriptions').removeClass('show-unread').addClass('show-all');
                 } else {
                     $(this).removeClass('no-unread-sub-row').addClass('unread-sub');
-                    if (pref_ViewMode == 'unread' && $('subscriptions').hasClass('show-all')) {
+                    if (pref_ViewMode == 'unread' && $('#subscriptions').hasClass('show-all')) {
                         $('#subscriptions').removeClass('show-all').addClass('show-unread');
                     }
                 }
