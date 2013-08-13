@@ -709,6 +709,7 @@ function getData() {
     $('body').removeClass('loaded').addClass('loading');
     $('.load-more-message').html('Marking as read...');
     $('#entries').empty();
+    global_ids = []; 
     getTitle();
     getHeadlines();
 }
