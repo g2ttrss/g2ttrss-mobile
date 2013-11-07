@@ -373,7 +373,7 @@ function getHeadlines(since) {
             <a href='" + headline.link + "' \
             class='item-title item-title-link' target='_blank'>" + headline.title + "</a> \
             <span class='item-source-title'>&nbsp;-&nbsp;" + headline.feed_title + "</span> \
-            <div class='item-snippet'>" + headline.excerpt + "</div> \
+            <div class='item-snippet'>" + (headline.excerpt || $(headline.content).text().substr(100)) + "</div> \
             </div> \
             <div class='entry-sub-header'>by " + headline.author + " on " + date.toLocaleString() + "</div> \
             </div> \
