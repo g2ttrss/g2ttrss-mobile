@@ -349,7 +349,13 @@ function getHeadlines(since) {
             global_ids.push(headline.id);
             var email_subject = headline.title;
             var email_body = '<br><h4>Sent to you via tt-rss</h4><h2><a href="' + headline.link + '">' + headline.title + '</a></h2>' + headline.content;
-            
+
+            var $content = $(headline.content);
+            var alt = null;
+            if($content.length == 1 && $content.is("img") && (alt = ($content.attr("title") || $content.attr("alt")))){
+              $content = $("<div>" + $content[0].outerHTML + "<div>" + alt + "</div></div>");
+            }
+
             var date = new Date(headline.updated * 1000);
             var entry = "<div id='" + headline.id + "' class='entry-row whisper" + ((!headline.unread) ? " read" : "") + "'> \
             <div class='entry-container'> \
@@ -381,7 +387,7 @@ function getHeadlines(since) {
             <div class='entry'> \
             <div id='entry-contents' class='entry whisper'> \
             <div class='entry-annotations'></div> \
-            <div class='entry-contents-inner'>" + headline.content + "</div> \
+            <div class='entry-contents-inner'>" + $content[0].outerHTML + "</div> \
             </div> \
             <div class='entry-footer'> \
             <div class='entry-actions'> \
