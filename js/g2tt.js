@@ -373,7 +373,7 @@ function getHeadlines(since) {
             <a href='" + headline.link + "' \
             class='item-title item-title-link' target='_blank'>" + headline.title + "</a> \
             <span class='item-source-title'>&nbsp;-&nbsp;" + headline.feed_title + "</span> \
-            <div class='item-snippet'>" + (headline.excerpt || $(headline.content).text().substr(100)) + "</div> \
+            <div class='item-snippet'>" + (headline.excerpt || $(headline.content).text().substr(0, 100)) + "</div> \
             </div> \
             <div class='entry-sub-header'>by " + headline.author + " on " + date.toLocaleString() + "</div> \
             </div> \
@@ -670,9 +670,9 @@ function getTitle() {
         data.op = "getFeeds";
         data.cat_id = "-4";
     }
-       
+
     var request = apiCall(data);
-        
+
     request.done(function (response, textStatus, jqXHR) {
         if (response['status'] != 0) {
             $.removeCookie('g2tt_sid');
@@ -702,14 +702,14 @@ function load() {
         getHeadlines();
         getTopCategories();
     }
-} 
+}
 
 function getData() {
     showArticles();
     $('body').removeClass('loaded').addClass('loading');
     $('.load-more-message').html('Marking as read...');
     $('#entries').empty();
-    global_ids = []; 
+    global_ids = [];
     getTitle();
     getHeadlines();
 }
@@ -748,9 +748,9 @@ var keepUnread = new function() {
             this.keepUnreadIdMap = [];
             var savedKeepUnread_ids;
             if (typeof ($.cookie(COOKIE_NAME)) !== 'undefined') {
-                savedKeepUnread_ids = $.cookie(COOKIE_NAME); 
+                savedKeepUnread_ids = $.cookie(COOKIE_NAME);
             }
-            
+
             if (savedKeepUnread_ids && savedKeepUnread_ids.length > 0) {
                 var idList = savedKeepUnread_ids.split(',');
                 for (var i=0; i < idList.length; i++) {
