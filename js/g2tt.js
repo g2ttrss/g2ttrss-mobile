@@ -354,6 +354,10 @@ function getHeadlines(since) {
             var alt = null;
             if($content.length == 1 && $content.is("img") && (alt = ($content.attr("title") || $content.attr("alt")))){
               $content = $("<div>" + $content[0].outerHTML + "<div>" + alt + "</div></div>");
+            } else {
+              var $container = $("<div></div>");
+              $container.append($content);
+              $content = $container;
             }
 
             var date = new Date(headline.updated * 1000);
