@@ -349,7 +349,17 @@ function getHeadlines(since) {
             global_ids.push(headline.id);
             var email_subject = headline.title;
             var email_body = '<br><h4>Sent to you via tt-rss</h4><h2><a href="' + headline.link + '">' + headline.title + '</a></h2>' + headline.content;
-            
+
+            var $content = $(headline.content);
+            var alt = null;
+            if($content.length == 1 && $content.is("img") && (alt = ($content.attr("title") || $content.attr("alt")))){
+              $content = $("<div>" + $content[0].outerHTML + "<div>" + alt + "</div></div>");
+            } else {
+              var $container = $("<div></div>");
+              $container.append($content);
+              $content = $container;
+            }
+
             var date = new Date(headline.updated * 1000);
             var entry = "<div id='" + headline.id + "' class='entry-row whisper" + ((!headline.unread) ? " read" : "") + "'> \
             <div class='entry-container'> \
@@ -373,7 +383,7 @@ function getHeadlines(since) {
             <a href='" + headline.link + "' \
             class='item-title item-title-link' target='_blank'>" + headline.title + "</a> \
             <span class='item-source-title'>&nbsp;-&nbsp;" + headline.feed_title + "</span> \
-            <div class='item-snippet'>" + headline.excerpt + "</div> \
+            <div class='item-snippet'>" + (headline.excerpt || $(headline.content).text().substr(0, 100)) + "</div> \
             </div> \
             <div class='entry-sub-header'>by " + headline.author + " on " + date.toLocaleString() + "</div> \
             </div> \
@@ -381,7 +391,7 @@ function getHeadlines(since) {
             <div class='entry'> \
             <div id='entry-contents' class='entry whisper'> \
             <div class='entry-annotations'></div> \
-            <div class='entry-contents-inner'>" + headline.content + "</div> \
+            <div class='entry-contents-inner'>" + $content[0].outerHTML + "</div> \
             </div> \
             <div class='entry-footer'> \
             <div class='entry-actions'> \
@@ -670,9 +680,9 @@ function getTitle() {
         data.op = "getFeeds";
         data.cat_id = "-4";
     }
-       
+
     var request = apiCall(data);
-        
+
     request.done(function (response, textStatus, jqXHR) {
         if (response['status'] != 0) {
             $.removeCookie('g2tt_sid');
@@ -702,14 +712,14 @@ function load() {
         getHeadlines();
         getTopCategories();
     }
-} 
+}
 
 function getData() {
     showArticles();
     $('body').removeClass('loaded').addClass('loading');
     $('.load-more-message').html('Marking as read...');
     $('#entries').empty();
-    global_ids = []; 
+    global_ids = [];
     getTitle();
     getHeadlines();
 }
@@ -748,9 +758,9 @@ var keepUnread = new function() {
             this.keepUnreadIdMap = [];
             var savedKeepUnread_ids;
             if (typeof ($.cookie(COOKIE_NAME)) !== 'undefined') {
-                savedKeepUnread_ids = $.cookie(COOKIE_NAME); 
+                savedKeepUnread_ids = $.cookie(COOKIE_NAME);
             }
-            
+
             if (savedKeepUnread_ids && savedKeepUnread_ids.length > 0) {
                 var idList = savedKeepUnread_ids.split(',');
                 for (var i=0; i < idList.length; i++) {
