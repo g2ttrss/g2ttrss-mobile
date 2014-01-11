@@ -23,6 +23,7 @@ if (typeof ($.cookie('g2tt_feedSort')) !== 'undefined') {
 
 global_backCat = []; // Feed view always starts with all items
 global_ids = []; // List of all article IDs currently displayed
+global_parentId = '-4';
 
 $(document).ready(function () {
     $('html').unbind('click').click(function () {
@@ -174,6 +175,7 @@ $(document).ready(function () {
 
     // Back to Feeds from sub category
     $('#sub-list-back').unbind('click').click(function () {
+        refreshCats();
         getFeeds(global_backCat.pop());
     });
 
@@ -268,8 +270,18 @@ function refreshCats() {
                 }
             }
         });
+
+        showEmpty();
+        
         $('#header-refresh').removeClass('m-button-pressed');
     });
+}
+
+function showEmpty() {
+    var visible = $('#sub-' + global_parentId).children(':visible');
+    if (visible.length == 0) {
+        $('#subscriptions').removeClass('show-unread').addClass('show-all');
+    }
 }
 
 function showFeeds() {
@@ -278,7 +290,7 @@ function showFeeds() {
     $('.back-to-feeds').addClass('hidden');
     $('.articlesMenu').addClass('hidden');
     $('.feedsMenu').removeClass('hidden');
-    if ($('#nav-title').html() != 'All articles') {
+    if (global_parentId != '-4') {
         $('#sub-list-back').removeClass('hidden');
     }
     $('#nav-title').html('');
@@ -580,6 +592,7 @@ function getTopCategories() {
 }
 
 function getFeeds(parent_id, parent_title, parent_unread) {
+    global_parentId = parent_id;
     if (parent_id === '-4') {
         getTopCategories();
         return;
