@@ -50,6 +50,7 @@ Current features
 * iPhone webapp support (startup image & icon)
 * login/logout support
 * load more articles (15 at a time)
+* search for keywords in feeds
 
 Future features are tracked as issues.
 
