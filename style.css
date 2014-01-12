@@ -673,7 +673,7 @@ a:visited,
     margin: 1px 0 0 2px;
     float: left;
     position: absolute;
-    height: 16pt;
+/*    height: 16pt; */
     font-size: 14pt;
 }
 .search-box #search-submit {

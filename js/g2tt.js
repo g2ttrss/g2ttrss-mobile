@@ -216,7 +216,28 @@ $(document).ready(function () {
     });
 
     // Search
-    $('#menu-search').unbind('click').click(function () {});
+    // Show search
+    $('#menu-search').unbind('click').click(function () {
+        $('.search-box').removeClass('hidden');
+        $('#search-input').focus();
+    });
+    // Clear and hide search
+    $('#search-cancel').unbind('click').click(function () {
+        $('#search-input').val('');
+        $('.search-box').addClass('hidden');
+    });
+    // Enter in search field searches
+    $('#search-input').keypress(function(e) {
+        if(e.which == 13) {
+            jQuery(this).blur();
+            jQuery('#search-submit').focus().click();
+        }
+    });
+    // Remove currently displayed headlines and search
+    $('#search-submit').unbind('click').click(function () {
+        $('#entries').empty();
+        getHeadlines();
+    });
 
     load();
 });
@@ -272,7 +293,7 @@ function refreshCats() {
         });
 
         showEmpty();
-        
+
         $('#header-refresh').removeClass('m-button-pressed');
     });
 }
@@ -326,6 +347,9 @@ function getHeadlines(since) {
     $('.entries-count').html('');
     if (typeof (since) === 'undefined') since = 0;
 
+    //Anytime we get headlines, check if there is a search filter
+    var search = $('#search-input').val();
+
     var data = new Object();
     data.op = "getHeadlines";
     data.feed_id = pref_Feed;
@@ -342,6 +366,7 @@ function getHeadlines(since) {
     } else {
         data.skip = since;
     }
+    data.search = search;
     var headlines = apiCall(data);
 
     headlines.done(function (response, textStatus, jqXHR) {
