@@ -1286,3 +1286,73 @@ a:visited,
   cursor: default;
   pointer-events: none;
   }
+  
+.share_widget {
+text-align:right;
+overflow:auto;
+padding:4px;
+border-top-left-radius:4px;
+border-top-right-radius:4px;
+-webkit-border-top-left-radius: 4px;
+-moz-border-top-right-radius: 4px;
+padding-top:0px;
+vertical-align:top;
+font-size:12px;
+}
+
+.share_widget a {
+vertical-align:middle;
+}
+
+.share_widget a:hover {
+text-decoration:underline;
+}
+
+.share_widget ul {
+list-style-type:none;
+width:100%;
+margin:0;
+padding:0;
+}
+
+.share_widget li {
+display:inline;
+}
+
+.share-count {
+background-color:#fff;
+margin-left:6px;
+margin-top:1px;
+position:relative;
+border-color:#cdd5e5;
+border-style:solid;
+border-width:1px;
+padding:0 2px;
+vertical-align:top;
+}
+
+.share-count i,.share-count u {
+border:solid transparent;
+border-right-color:#D7D7D7;
+top:2px;
+left:-5px;
+display:block;
+position:absolute;
+height:1px;
+border-width:4px 5px 4px 0;
+}
+
+.share-count i {
+left:-3px;
+z-index:5;
+border-right-color:#FFF;
+}
+.share-count span{
+vertical-align:top;	
+}
+
+.gplusbut {
+top:3px;
+display:inline;
+position:relative;
+}

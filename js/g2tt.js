@@ -437,6 +437,9 @@ function getHeadlines(since) {
             <span class='email link unselectable' title='Sent by mail'> \
             <a class='link unselectable' href='mailto:?subject=" + encodeURIComponent(email_subject) + "&body=" + encodeURIComponent(email_body) + "'>E-Mail</a> \
             </span> \
+            <div class='share_widget post-"+headline.id+"'>Share: \
+             | <a href='https://plus.google.com/share?url="+encodeURIComponent(headline.link)+"' target='_blank'><img src='//www.gstatic.com/images/icons/gplus-16.png' alt='Share on Google+'/></a><span class='share-count'><i></i><u></u><span id='gp-count'>--</span></span> \
+			 | <a href='https://twitter.com/intent/tweet?text="+encodeURIComponent(headline.title+' '+headline.link)+"' target='_blank'><img src='//g.twimg.com/twitter-bird-16x16.png' alt='Share on Twitter'/></a></a><span class='share-count'><i></i><u></u><span id='tw-count'>--</span></span> \
             <wbr /> \
             </div> \
             </div> \
@@ -468,6 +471,22 @@ function getHeadlines(since) {
             data.mode = 0;
             data.field = 2;
             var response = apiCall(data);
+			var post_id = data.article_ids;
+			var post_url = $(this).find('a.item-title.item-title-link').attr('href');
+						// clean post url removing GA utm_ for shared count
+			post_url = post_url.replace(/\?([^#]*)/, function(_, search) {
+							search = search.split('&').map(function(v) {
+							  return !/^utm_/.test(v) && v;
+							}).filter(Boolean).join('&'); // omg filter(Boolean) so dope.
+							return search ? '?' + search : '';
+							});
+			$.sharedCount(post_url, function(data){
+					$(".share_widget.post-"+post_id+" span#tw-count").text(data.Twitter);
+					//$(".share_widget.post-"+post_id+" span#fb-count").text(data.Facebook.like_count);
+					$(".share_widget.post-"+post_id+" span#gp-count").text(data.GooglePlusOne);
+					//$("#post-"+post_id+" span#li-count").text(data.LinkedIn);
+					//$("#post-"+post_id+" span#del-count").text(data.Delicious);
+			});
         });
 
         // Collapse an entry
@@ -832,3 +851,25 @@ var keepUnread = new function() {
         $.cookie(COOKIE_NAME, strVal);
     };
 }
+jQuery.sharedCount = function(url, fn) {
+    url = encodeURIComponent(url || location.href);
+    var arg = {
+	    data: {
+	    	url : url,
+	    	apikey : global_sharedcountkey
+	    },
+        url: "//" + (location.protocol == "https:" ? "sharedcount.appspot" : "api.sharedcount") + ".com/",
+        cache: true,
+        dataType: "json"
+    };
+    if ('withCredentials' in new XMLHttpRequest) {
+        arg.success = fn;
+    }
+    else {
+        var cb = "sc_" + url.replace(/\W/g, '');
+        window[cb] = fn;
+        arg.jsonpCallback = cb;
+        arg.dataType += "p";
+    }
+    return jQuery.ajax(arg);
+};
