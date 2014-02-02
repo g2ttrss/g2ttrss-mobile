@@ -7,175 +7,248 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
 <title>TT-RSS Mobile</title>
 <link rel="shortcut icon" href="../images/favicon.png"> 
-<script type="text/javascript" src="js/jquery-1.9.1.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+
+<script src="js/jquery.mobile-1.4.0.min.js"></script>
+<!-- added for jquery dialog ui -->
+<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
 <script type="text/javascript" src="js/jquery.cookie.js"></script>
-<link rel="stylesheet" type="text/css" href="style.css">
+<!-- added for jquery dialog ui -->
+<link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery.ui.all.css">
+
 <script type="text/javascript" src="js/g2tt-config.js"></script>
 <script type="text/javascript" src="js/g2tt.js"></script>
+<!-- added for font-awesome icons -->
+<link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+<!-- added for font-awesome icons -->
+
+<!-- moved to end of head to make sure any CSS from jquery-ui and font-awesome can be overwritten -->
+<link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body class="landscape" style="zoom: 100%;">
-<div class='login content clearfix hidden'>
-  <div class='sign-in'>
-    <div class='signin-box'>
+
+<div id="bodyFull" data-role="page" style="background-color:white">
+
+	<div id="addNewSubscription">
+		<div id="dialog-form" title="Subscribe to Feed" >
+			<p class="validateTips hidden"></p>
+			<div id="multipleFeedNotice" style="background-color: #ecf4ff;border-color: #88b0f0;" class="hidden">
+				<span>
+				<img src="https://www.mudreader.com/images/information.png"></span>
+				<span>Provided URL is a HTML page referencing multiple feeds, 
+				please select required feed from the dropdown menu below.
+				</span>
+			</div>
+		
+			<form>
+			<fieldset>
+				<label for="feedURL">Feed or site URL</label>
+				<div style="position:relative;">
+				<input type="text" name="feedURL" id="feedURL" class="text ui-widget-content ui-corner-all">
+				<i class="fa fa-spinner fa-spin fa-lg hidden" id="indicator"  ></i>
+				</div>
+				<label for="catItems">Category</label>				
+				<select id="catItems" name="catItems"><optgroup label="Please choose from list"></optgroup></select>
+				
+				<div id="multipleFeedsSelect" class="hidden">
+				<label for="feedsAvail">Available Feeds</label>				
+				<select id="feedsAvail" name="feedsAvail"><optgroup label="Choose available feed"></select>
+				</div>
+			</fieldset>
+			</form>
+		</div>
+ 
+
+	</div>
+	
+
+	<div class='login content clearfix hidden'>
+	  <div class='sign-in'>
+	  	<div class="header">
+	  		<img src="https://www.mudreader.com/images/logo_wide.png">
+	  	</div>
+	    <div class='signin-box'>
       <h2>Sign in </h2>
       <form id='login' class=''>
-      <div class='username-div'>
-      <label for='Username'>
-        <strong class='username-label'>Username</strong>
-      </label> 
-      <input type='username' spellcheck='false' autocorrect="off" autocapitalize="none" name='Username' id='Username' value='' /></div>
-      <div class='passwd-div'>
-      <label for='Passwd'>
-        <strong class='passwd-label'>Password</strong>
-      </label> 
-      <input type='password' name='Passwd' id='Passwd' /></div>
-      <input type='submit' class='g-button g-button-submit' name='signIn' id='signIn' value='Sign in' /> 
-    </div>
-  </div>
-</div>
-<div id='main'>
-  <div class="nav-bar-container">
-    <div class="nav-bar">
-      <table class="nav-table">
-        <tbody>
-          <tr>
-            <td class="nav-table-left">
-              <div class="m-button back-to-feeds" id="back-to-feeds">
-                <span class="m-button-contents">&laquo; Feeds</span>
-              </div>
-              <div class="m-button hidden" id="sub-list-back">
-                <span class="m-button-contents">&laquo; Back</span>
-              </div>
-              <div class="m-button hidden" id="back-to-stream">
-                <span class="m-button-contents">&laquo; Back</span>
-              </div>
-            </td>
-            <td class="nav-table-middle">
-              <div id="nav-title"></div>
-            </td>
-            <td class="nav-table-right">
-              <div class="m-button" id="header-menu">
-                <span class="m-button-contents"></span>
-              </div>
-              <div class="m-button" id="header-refresh">
-                <span class="m-button-contents"></span>
-              </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-      <table class="search-box hidden">
-        <tbody>
-          <tr>
-            <td>
-              <div class="m-button" id="search-cancel">
-                <span class="m-button-contents">Cancel</span>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <form id="search-form" action="">
-                <input id="search-input" type="text" />
-                <div class="m-button" id="search-submit">
-                  <span class="m-button-contents"></span>
-                </div>
-              </form>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-      <div id="nav-bar-shadow"></div>
-    </div>
-    <div id="message-area"></div>
-    <div class="g2tt-menu g2tt-menu-vertical"
-    style="-webkit-user-select: none; visibility: visible; right: 7px; top: 39px; display: none;" role="menu"
-    aria-haspopup="true">
-      <div class="g2tt-menuitem g2tt-option showItem articlesMenu" role="menuitem" style="-webkit-user-select: none;" id="all">
-        <div class="g2tt-menuitem-content">
-        <div class="g2tt-menuitem-checkbox"></div>Show all</div>
-      </div>
-      <div class="g2tt-menuitem g2tt-option showItem articlesMenu" role="menuitem" style="-webkit-user-select: none;" id="unread">
-        <div class="g2tt-menuitem-content">
-        <div class="g2tt-menuitem-checkbox"></div>Show unread</div>
-      </div>
-      <div class="g2tt-menuitem g2tt-option showItem articlesMenu" role="menuitem" style="-webkit-user-select: none;" id="marked">
-        <div class="g2tt-menuitem-content">
-        <div class="g2tt-menuitem-checkbox"></div>Show starred</div>
-      </div>
-      <div class="g2tt-menuitem g2tt-option showItem articlesMenu" role="menuitem" style="-webkit-user-select: none;" id="published">
-        <div class="g2tt-menuitem-content">
-        <div class="g2tt-menuitem-checkbox"></div>Show published</div>
-      </div>
-      <div class="g2tt-menuseparator articlesMenu" style="-webkit-user-select: none;" role="separator" id="seperator1"></div>
-      <div class="g2tt-menuitem g2tt-option sortItem articlesMenu" role="menuitem" style="-webkit-user-select: none;" id="feed_dates">
-        <div class="g2tt-menuitem-content">
-        <div class="g2tt-menuitem-checkbox"></div>Sort by newest</div>
-      </div>
-      <div class="g2tt-menuitem g2tt-option sortItem articlesMenu" role="menuitem" style="-webkit-user-select: none;" id="date_reverse">
-        <div class="g2tt-menuitem-content">
-        <div class="g2tt-menuitem-checkbox"></div>Sort by oldest</div>
-      </div>
-      <div class="g2tt-menuseparator articlesMenu" style="-webkit-user-select: none;" role="separator" id="seperator2"></div>
-      <div class="g2tt-menuitem articlesMenu" role="menuitem" style="-webkit-user-select: none;" id="menu-search">
-        <div class="g2tt-menuitem-content">Search</div>
-      </div>
-      <div class="g2tt-menuseparator articlesMenu" style="-webkit-user-select: none;" role="separator" id="seperator3"></div>
-      <div class="g2tt-menuitem articlesMenu" role="menuitem" style="-webkit-user-select: none;" id="menu-mark-read">
-        <div class="g2tt-menuitem-content">Mark all as read</div>
-      </div>
-      <div class="g2tt-menuitem g2tt-option feedsItem feedsMenu hidden" role="menuitem" style="-webkit-user-select: none;" id="feeds-all">
-        <div class="g2tt-menuitem-content">
-        <div class="g2tt-menuitem-checkbox"></div>Show all</div>
-      </div>
-      <div class="g2tt-menuitem g2tt-option feedsItem feedsMenu hidden" role="menuitem" style="-webkit-user-select: none;" id="feeds-unread">
-        <div class="g2tt-menuitem-content">
-        <div class="g2tt-menuitem-checkbox"></div>Show unread</div>
-      </div>
-      <div class="g2tt-menuseparator" style="-webkit-user-select: none;" role="separator" id="seperator4"></div>
-      <div class="g2tt-menuitem g2tt-option feedsSort feedsMenu hidden" role="menuitem" style="-webkit-user-select: none;" id="feeds-alpha">
-        <div class="g2tt-menuitem-content">
-        <div class="g2tt-menuitem-checkbox"></div>Sort A-Z</div>
-      </div>
-      <div class="g2tt-menuseparator feedsMenu" style="-webkit-user-select: none;" role="separator" id="seperator4"></div>
-      <div class="g2tt-menuitem feedsMenu" role="menuitem" style="-webkit-user-select: none;" id="menu-logout">
-        <div class="g2tt-menuitem-content">Logout</div>
-      </div>
-    </div>
-  </div>
-  <div id="feed" class="">
-    <div class="samedir">
-      <div id="entries" class="mobilelist" style="visibility: visible;">
-    <!-- Entries go here -->
-      </div>
-    </div>
-    <div id="scroll-filler">
-      <div id="show-more-row">
-        <div class="load-more-message">Loading...</div>
-        <div class="entries-count"></div>
-      </div>
-    </div>
-    <div id="viewer-bottom-links">
-      <div id="viewer-bottom-right" class="nav-right">
-        <span id="mark-these-read" class="">Mark these items as read</span>
-      </div>
-    </div>
-    <div id="entries-footer" class="nav-bar">
-      <div id="entries-footer-buttons">
-        <div class="m-button back-to-feeds">
-          <span class="m-button-contents">&laquo; Feeds</span>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div id="subscriptions" class="hidden">
-    <div id="loading-area-container" class="hidden">
-      <p>Loading...</p>
-    </div>
-    <div id="subscriptions-list">
-    <!-- Categories go here -->
-    </div>
-  </div>
+		      <div class='username-div'>
+		      <label for='Username'>
+			<strong class='username-label'>Username</strong>
+		      </label> 
+		      <input type='username' spellcheck='false' autocorrect="off" autocapitalize="none" name='Username' id='Username' value='' /></div>
+		      <div class='passwd-div'>
+			      <label for='Passwd'>
+				<strong class='passwd-label'>Password</strong>
+			      </label> 
+			      <input type='password' name='Passwd' id='Passwd' />
+		      </div>
+		      <div id='submit_register'>
+			      <input type='submit' class='g-button g-button-submit' style="width:100%" name='signIn' id='signIn' value='Sign in' /> 
+		      </div>
+	      </div>
+	    	<div id="extraOptions">
+			<br />
+			<a class="register_new" target="_self" href="https://www.mudreader.com/register.php">Create New Account</a>
+			<br />	<br />
+			<a class="forgotpass" target="_self" href="https://www.mudreader.com/public.php?mobile=false&amp;op=forgotpass">I forgot my password</a>
+			<a class="fullSite" target="_self" href="https://www.mudreader.com/index.php?mobile=false">full site</a>
+		</div>
+	  </div>
+	</div>
+	<div id='main'>
+	  <div class="nav-bar-container">
+	    <div class="nav-bar">
+	      <table class="nav-table">
+		<tbody>
+		  <tr>
+		    <td class="nav-table-left">
+		      <div class="m-button back-to-feeds" id="back-to-feeds">
+			<span class="m-button-contents">&laquo; Feeds</span>
+		      </div>
+		      <div class="m-button hidden" id="sub-list-back">
+			<span class="m-button-contents">&laquo; Back</span>
+		      </div>
+		      <div class="m-button hidden" id="back-to-stream">
+			<span class="m-button-contents">&laquo; Back</span>
+		      </div>
+		      <!-- added for new subscriptions -->
+		      <div class="m-button hidden" id="add-new-subscription">
+			<span class="m-button-contents"><i class="fa fa-plus"></i></span>
+		      </div>
+		      <!-- added for new subscriptions -->
+	 
+		    </td>	
+		    <td class="nav-table-middle">
+		      <div id="nav-title"></div>
+		    </td>
+		    <td class="nav-table-right">
+		      <div class="m-button" id="header-menu">
+			<span class="m-button-contents"><i id="menuDown" class="fa fa-angle-double-down fa-2x"></i></span>
+			<span class="m-button-contents"><i id="menuUp" class="fa fa-angle-double-up fa-2x hidden"></i></span>
+
+			</div>
+		      <div class="m-button" id="header-refresh">
+			<span class="m-button-contents"><i class="fa fa-repeat fa-lg"></i></span>
+		      </div>
+		    </td>
+		  </tr>
+		</tbody>
+	      </table>
+	      <table class="search-box hidden">
+		<tbody>
+		  <tr>
+		    <td>
+		      <div class="m-button" id="search-cancel">
+			<span class="m-button-contents">Cancel</span>
+		      </div>
+		    </td>
+		  </tr>
+		  <tr>
+		    <td>
+		      <form id="search-form" action="">
+			<input id="search-input" type="text" />
+			<div class="m-button" id="search-submit">
+			  <span class="m-button-contents"></span>
+			</div>
+		      </form>
+		    </td>
+		  </tr>
+		</tbody>
+	      </table>
+	      <div id="nav-bar-shadow"></div>
+	    </div>
+	    <div id="message-area"></div>
+	    <div class="g2tt-menu g2tt-menu-vertical"
+	    style="-webkit-user-select: none; visibility: visible; right: 7px; top: 39px; display: none;" role="menu"
+	    aria-haspopup="true">
+	      <div class="g2tt-menuitem g2tt-option showItem articlesMenu" role="menuitem" style="-webkit-user-select: none;" id="all">
+		<div class="g2tt-menuitem-content">
+		<div class="g2tt-menuitem-checkbox"><i class="fa fa-check fa-lg"></i></div>Show all</div>
+	      </div>
+	      <div class="g2tt-menuitem g2tt-option showItem articlesMenu" role="menuitem" style="-webkit-user-select: none;" id="unread">
+		<div class="g2tt-menuitem-content">
+		<div class="g2tt-menuitem-checkbox"><i class="fa fa-check fa-lg"></i></div>Show unread</div>
+	      </div>
+	      <div class="g2tt-menuitem g2tt-option showItem articlesMenu" role="menuitem" style="-webkit-user-select: none;" id="marked">
+		<div class="g2tt-menuitem-content">
+		<div class="g2tt-menuitem-checkbox"><i class="fa fa-check fa-lg"></i></div>Show starred</div>
+	      </div>
+	      <div class="g2tt-menuitem g2tt-option showItem articlesMenu" role="menuitem" style="-webkit-user-select: none;" id="published">
+		<div class="g2tt-menuitem-content">
+		<div class="g2tt-menuitem-checkbox"><i class="fa fa-check fa-lg"></i></div>Show published</div>
+	      </div>
+	      <div class="g2tt-menuseparator articlesMenu" style="-webkit-user-select: none;" role="separator" id="seperator1"></div>
+	      <div class="g2tt-menuitem g2tt-option sortItem articlesMenu" role="menuitem" style="-webkit-user-select: none;" id="feed_dates">
+		<div class="g2tt-menuitem-content">
+		<div class="g2tt-menuitem-checkbox"><i class="fa fa-check fa-lg"></i></div>Sort by newest</div>
+	      </div>
+	      <div class="g2tt-menuitem g2tt-option sortItem articlesMenu" role="menuitem" style="-webkit-user-select: none;" id="date_reverse">
+		<div class="g2tt-menuitem-content">
+		<div class="g2tt-menuitem-checkbox"><i class="fa fa-check fa-lg"></i></div>Sort by oldest</div>
+	      </div>
+	      <div class="g2tt-menuseparator articlesMenu" style="-webkit-user-select: none;" role="separator" id="seperator2"></div>
+	      <div class="g2tt-menuitem articlesMenu" role="menuitem" style="-webkit-user-select: none;" id="menu-search">
+		<div class="g2tt-menuitem-content">Search</div>
+	      </div>
+	      <div class="g2tt-menuseparator articlesMenu" style="-webkit-user-select: none;" role="separator" id="seperator3"></div>
+	      <div class="g2tt-menuitem articlesMenu" role="menuitem" style="-webkit-user-select: none;" id="menu-mark-read">
+		<div class="g2tt-menuitem-content">Mark all as read</div>
+	      </div>
+	      <div class="g2tt-menuitem g2tt-option feedsItem feedsMenu hidden" role="menuitem" style="-webkit-user-select: none;" id="feeds-all">
+		<div class="g2tt-menuitem-content">
+		<div class="g2tt-menuitem-checkbox"><i class="fa fa-check fa-lg"></i></div>Show all</div>
+	      </div>
+	      <div class="g2tt-menuitem g2tt-option feedsItem feedsMenu hidden" role="menuitem" style="-webkit-user-select: none;" id="feeds-unread">
+		<div class="g2tt-menuitem-content">
+		<div class="g2tt-menuitem-checkbox"><i class="fa fa-check fa-lg"></i></div>Show unread</div>
+	      </div>
+	      <div class="g2tt-menuseparator" style="-webkit-user-select: none;" role="separator" id="seperator4"></div>
+	      <div class="g2tt-menuitem g2tt-option feedsSort feedsMenu hidden" role="menuitem" style="-webkit-user-select: none;" id="feeds-alpha">
+		<div class="g2tt-menuitem-content">
+		<div class="g2tt-menuitem-checkbox"><i class="fa fa-check fa-lg"></i></div>Sort A-Z</div>
+	      </div>
+	      <div class="g2tt-menuseparator feedsMenu" style="-webkit-user-select: none;" role="separator" id="seperator4"></div>
+	      <div class="g2tt-menuitem feedsMenu" role="menuitem" style="-webkit-user-select: none;" id="menu-logout">
+		<div class="g2tt-menuitem-content">Logout</div>
+	      </div>
+	    </div>
+	  </div>
+	  <div id="feed" class="">
+	    <div class="samedir">
+	      <div id="entries" class="mobilelist" style="visibility: visible;">
+	    <!-- Entries go here -->
+	      </div>
+	    </div>
+	    <div id="scroll-filler">
+	      <div id="show-more-row">
+		<div class="load-more-message"><i class="fa fa-spinner fa-spin"></i> &nbsp;Loading...</div>
+		<div class="entries-count"></div>
+	      </div>
+	    </div>
+	    <div id="viewer-bottom-links">
+	      <div id="viewer-bottom-right" class="nav-right">
+		<span id="mark-these-read" class="">Mark these items as read</span>
+	      </div>
+	    </div>
+	    <div id="entries-footer" class="nav-bar">
+	      <div id="entries-footer-buttons">
+		<div class="m-button back-to-feeds">
+		  <span class="m-button-contents">&laquo; Feeds</span>
+		</div>
+	      </div>
+	    </div>
+	  </div>
+	  <div id="subscriptions" class="hidden">
+	    <div id="loading-area-container" class="hidden">
+	      <p><i class="fa fa-spinner fa-spin"></i> &nbsp;Loading...</p>
+	    </div>
+	    <div id="subscriptions-list">
+	    <!-- Categories go here -->
+	    </div>
+	  </div>
+	  
+	  
+	</div>
+</form>
 </div>
 </body>
 </html>
