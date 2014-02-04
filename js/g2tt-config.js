@@ -1,7 +1,7 @@
 // Config
 global_ttrssUrl = "/tt-rss/";
 
-global_sharedcountkey = ""; // Sign up for key at http://www.sharedcount.com/documentation.php
+global_sharedcountkey = ""; // optional sharedcount.com api key (50k hits free)
 
 // Preferences
 pref_Feed = '-4'; // Default: all items
@@ -10,3 +10,5 @@ pref_ViewMode = 'unread'; // Default: unread articles only
 pref_OrderBy = 'date_reverse'; // Default: oldest first
 pref_FeedSort = '0'; // Default: Do not sort feeds
 pref_StartInCat = '0'; // Default: Start showing feeds
+//added so user can change feed limit easily. 
+pref_Feed_limit = 25; // Default: Load 25 Items...
