@@ -54,21 +54,21 @@ $(document).ready(function () {
         var request = apiCall(data);
 
         request.done(function (response, textStatus, jqXHR) {
-            console.log(response['content']);
-            if (response['content'].error =='LOGIN_ERROR'){
-                window.alert("Username and/or Password were incorrect!");       
-            }
-            if (response['content'].error =='API_DISABLED'){
-                window.alert("The API Setting is disabled. Login on the desktop version and enable API in the Preferences.");       
-            }
-            else {
-                $.cookie('g2tt_sid', response['content'].session_id, {
-                    expires: 7
-                });
-                $('.login').addClass('hidden');
-                $('#main').removeClass('hidden');
-                load();
-            }
+            //console.log(response['content']);
+             if (response['content'].error =='LOGIN_ERROR'){
+                 window.alert("Username and/or Password were incorrect!");       
+             }
+             if (response['content'].error =='API_DISABLED'){
+                 window.alert("The API Setting is disabled. Login on the desktop version and enable API in the Preferences.");       
+             }
+             else {
+                 $.cookie('g2tt_sid', response['content'].session_id, {
+                     expires: 7
+                 });
+                 $('.login').addClass('hidden');
+                 $('#main').removeClass('hidden');
+                 load();
+             }
         });
 
         // callback handler that will be called on failure
