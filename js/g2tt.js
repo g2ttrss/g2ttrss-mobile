@@ -579,14 +579,13 @@ function getHeadlines(since, optFeed_limit) {
             <div class='entry-footer'> \
             <div class='entry-actions'> \
             <div class='entry-actions-primary'> \
-            <i class='fa fa-square-o read-state link unselectable' title='Mark as read'></i>&nbsp;Mark as read \
+            <i class='fa fa-square-o read-state link unselectable' title='Mark as read'>&nbsp;<a>Mark as read</a></i>  \
             <span class='link unselectable' title='Sent by mail'> \
-            <i class='fa fa-envelope-o' style='vertical-align:top;'></i> \
-            <a class='link unselectable' href='mailto:?subject=" + encodeURIComponent(email_subject) + "&body=" + encodeURIComponent(email_body) + "'>E-Mail</a> \
+            <i class='fa fa-envelope-o' style='padding-left:5px'>&nbsp;<a class='link unselectable' href='mailto:?subject=" + encodeURIComponent(email_subject) + "&body=" + encodeURIComponent(email_body) + "'>E-Mail</a></i> \
             </span> \
 			<div class='share_widget post-"+headline.id+"'>Share: \
             <a href='https://plus.google.com/share?url="+encodeURIComponent(headline.link)+"' target='_blank'><i class='fa fa-google-plus-square' style='color:#d34836;'></i></a><span class='share-count'><i></i><u></u><span id='gp-count'>--</span></span>  \
-			<a href='https://twitter.com/intent/tweet?text="+encodeURIComponent(headline.title+' '+headline.link)+"' target='_blank'><i class='fa fa-twitter' style='color:#4099FF;'></i></a></a><span class='share-count'><i></i><u></u><span id='tw-count'>--</span></span>  \
+			<a href='https://twitter.com/intent/tweet?text="+encodeURIComponent(headline.title+' '+headline.link).replace("'","%27")+"' target='_blank'><i class='fa fa-twitter' style='color:#4099FF;'></i></a></a><span class='share-count'><i></i><u></u><span id='tw-count'>--</span></span>  \
             </div> \
 			<wbr /> \
             </div> \
