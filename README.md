@@ -25,7 +25,7 @@ How to use it?
 You should install the files in a directory on the same host as your TT-RSS install.
 As the webapp uses AJAX calls to access the API, it should be hosted on the **same domain name**.
 G2TTRSS assumes that your TT-RSS install is located at `<your-domain>/tt-rss`, if this is not the case
-edit `js/g2tt.js` and change `global_ttrssUrl` (line 2) to point to the correct location.
+edit `js/g2tt-config.js` and change `global_ttrssUrl` (line 2) to point to the correct location.
 If the webapp is installed in a subdirectory of TT-RSS, it could be wiped on an update to TT-RSS
 so after each update of TT-RSS, you may need to reinstall G2TTRSS.
 
@@ -61,7 +61,7 @@ Configuration options can be found in the js/g2tt-config.js file. These are opti
 
 Options:
 
-* **global_ttrssUrl** (Default: _("/tt-rss/")_)
+* **global_ttrssUrl** (Default: _("../")_)
 
     The path to your TT-RSS installation relative to your domain.
 
