@@ -257,12 +257,14 @@ $(document).ready(function () {
         if(e.which == 13) {
             jQuery(this).blur();
             jQuery('#search-submit').focus().click();
+            return false;
         }
     });
     // Remove currently displayed headlines and search
     $('#search-submit').unbind('click').click(function () {
         $('#entries').empty();
         getHeadlines();
+        return false;
     });
 
     load();
