@@ -1198,6 +1198,9 @@ function expandEntry($entryRow) {
     $entryRow.addClass('expanded');
     $('html,body').scrollTop($entryRow.offset().top);
 
+    $('.current-entry').removeClass('current-entry');
+    $entryRow.addClass('current-entry');
+
     // Mark as read
     if (! $entryRow.hasClass('read')) {
         $entryRow.addClass('read');
