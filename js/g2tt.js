@@ -1284,3 +1284,9 @@ function toggleEntryAsRead($entryRow) {
     data.field = 2;
     var response = apiCall(data);
 }
+
+function toggleCurrentEntryAsRead($entryRow) {
+    if ($('.current-entry').length) {
+        toggleEntryAsRead($('.current-entry'));
+    }
+}
