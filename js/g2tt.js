@@ -1217,6 +1217,35 @@ function collapseEntry($entryRow) {
     $entryRow.removeClass('expanded');
 }
 
+
+function expandNextEntry() {
+    if (! $('.current-entry').length) {
+        $nextEntry = $('.entry-row').eq(0);
+
+    } else {
+        $nextEntry = $('.current-entry').next();
+    }
+
+    if (! $nextEntry.is('.entry-row')) {
+        return;
+    }
+
+    expandEntry($nextEntry);
+}
+
+function expandPreviousEntry() {
+    if (! $('.current-entry').length) {
+        return
+    }
+
+    $previous = $('.current-entry').prev();
+
+    if (! $previous.is('.entry-row')) {
+        return;
+    }
+
+    expandEntry($previous);
+}
 function toggleEntryAsRead($entryRow) {
     $entryRow.toggleClass('read');
 
