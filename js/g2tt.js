@@ -607,28 +607,7 @@ function getHeadlines(since) {
 
         // Toggle read
         $('.read-state').unbind('click').click(function () {
-            $(this).closest('.entry-row').toggleClass('read');
-
-            if (! $(this).hasClass('read')) {
-                for (var i = 0; i < global_ids.length; i++) {
-                    var articleId = $(this).closest('.entry-row').attr('id');
-                    if (global_ids[i] == articleId) {
-                        global_ids.splice(i,1);
-                        keepUnread.addId(articleId);
-                    }
-                }
-            } else {
-                var articleId = $(this).closest('.entry-row').attr('id');
-                global_ids.push(articleId);
-                keepUnread.removeId(articleId);
-            }
-
-            var data = new Object();
-            data.op = "updateArticle";
-            data.article_ids = $(this).closest('.entry-row').attr('id');
-            data.mode = 2;
-            data.field = 2;
-            var response = apiCall(data);
+            toggleEntryAsRead($(this).closest('.entry-row'));
         });
 
         /*
@@ -1231,4 +1210,29 @@ function expandEntry($entryRow) {
 
 function collapseEntry($entryRow) {
     $entryRow.removeClass('expanded');
+}
+
+function toggleEntryAsRead($entryRow) {
+    $entryRow.toggleClass('read');
+
+    if (! $(this).hasClass('read')) {
+        for (var i = 0; i < global_ids.length; i++) {
+            var articleId = $entryRow.attr('id');
+            if (global_ids[i] == articleId) {
+                global_ids.splice(i,1);
+                keepUnread.addId(articleId);
+            }
+        }
+    } else {
+        var articleId = $entryRow.attr('id');
+        global_ids.push(articleId);
+        keepUnread.removeId(articleId);
+    }
+
+    var data = new Object();
+    data.op = "updateArticle";
+    data.article_ids = $entryRow.attr('id');
+    data.mode = 2;
+    data.field = 2;
+    var response = apiCall(data);
 }
