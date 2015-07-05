@@ -572,7 +572,7 @@ function getHeadlines(since) {
             <div class='entry-footer'> \
             <div class='entry-actions'> \
             <div class='entry-actions-primary'> \
-            <i class='fa fa-square-o read-state link unselectable' title='Mark as read'>&nbsp;Mark as read</i> \
+            <i class='fa fa-envelope-o read-state link unselectable' title='Toggle read'>&nbsp;Toggle read</i> \
             <span class='link unselectable' title='Sent by mail'> \
             <i class='fa fa-envelope-o' style='vertical-align:top;'></i> \
             <a class='link unselectable' href='mailto:?subject=" + encodeURIComponent(email_subject) + "&body=" + encodeURIComponent(email_body) + "'>E-Mail</a> \
@@ -601,7 +601,6 @@ function getHeadlines(since) {
 
             // Mark as read
             $(this).closest('.entry-row').addClass('read');
-            $(this).closest('.entry-row').find('.read-state').addClass('fa-check-square-o').removeClass('fa-square-o');
             var data = new Object();
             data.op = "updateArticle";
             data.article_ids = $(this).closest('.entry-row').attr('id');
@@ -624,9 +623,8 @@ function getHeadlines(since) {
         // Toggle read
         $('.read-state').unbind('click').click(function () {
             $(this).closest('.entry-row').toggleClass('read');
-            $(this).toggleClass('fa-check-square-o').toggleClass('fa-square-o');
 
-            if ($(this).hasClass('fa-square-o')) {
+            if (! $(this).hasClass('read')) {
                 for (var i = 0; i < global_ids.length; i++) {
                     var articleId = $(this).closest('.entry-row').attr('id');
                     if (global_ids[i] == articleId) {

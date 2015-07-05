@@ -399,14 +399,11 @@ a:visited,
 }
 
 .entry-actions .read-state {
-    padding: 0 8px 0 5px;
+    padding: 0 8px 0 17px;
     position: relative;
-    float: left;
     vertical-align: top;
     line-height: 15px;
     white-space: nowrap;
-    width: 95px;
-text-align: right;
 }
 
 .expanded .entry-top-bar .entry-next-icon,
