@@ -1199,13 +1199,15 @@ function expandEntry($entryRow) {
     $('html,body').scrollTop($entryRow.offset().top);
 
     // Mark as read
-    $entryRow.addClass('read');
-    var data = new Object();
-    data.op = "updateArticle";
-    data.article_ids = $entryRow.attr('id');
-    data.mode = 0;
-    data.field = 2;
-    var response = apiCall(data);
+    if (! $entryRow.hasClass('read')) {
+        $entryRow.addClass('read');
+        var data = new Object();
+        data.op = "updateArticle";
+        data.article_ids = $entryRow.attr('id');
+        data.mode = 0;
+        data.field = 2;
+        var response = apiCall(data);
+    }
 }
 
 function collapseEntry($entryRow) {
