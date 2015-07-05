@@ -596,7 +596,7 @@ function getHeadlines(since) {
 
         // Collapse an entry
         $('.entry-top-bar').unbind('click').click(function () {
-            $(this).closest('.entry-row').removeClass('expanded');
+            collapseEntry($(this).closest('.entry-row'));
         });
 
         // Next entry
@@ -1227,4 +1227,8 @@ function expandEntry($entryRow) {
     data.mode = 0;
     data.field = 2;
     var response = apiCall(data);
+}
+
+function collapseEntry($entryRow) {
+    $entryRow.removeClass('expanded');
 }
