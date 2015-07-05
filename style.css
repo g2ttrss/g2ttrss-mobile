@@ -347,9 +347,9 @@ a:visited,
     -webkit-transition-property: none;
     -webkit-transition-duration: 0;
 }
-.expanded .entry-container { border-color: #3162c4 }
 .expanded .entry-container .entry-header-body { background-color: #fff }
 .expanded .entry-container .entry-header-body .text { padding-bottom: 0 }
+.current-entry .entry-container { border-color: #3162c4 }
 .entry-container .entry-header-body { padding-left: 25px }
 .entry-container .entry-header { position: relative }
 .entry-footer {
