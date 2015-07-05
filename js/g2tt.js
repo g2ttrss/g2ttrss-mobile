@@ -1217,6 +1217,20 @@ function collapseEntry($entryRow) {
     $entryRow.removeClass('expanded');
 }
 
+function toggleEntryAsExpanded($entryRow) {
+    if ($entryRow.hasClass('expanded')) {
+        collapseEntry($entryRow);
+
+    } else {
+        expandEntry($entryRow);
+    }
+}
+
+function toggleCurrentEntryAsExpanded($entryRow) {
+    if ($('.current-entry').length) {
+        toggleEntryAsExpanded($('.current-entry'));
+    }
+}
 
 function expandNextEntry() {
     if (! $('.current-entry').length) {
