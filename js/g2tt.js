@@ -1260,6 +1260,38 @@ function expandPreviousEntry() {
 
     expandEntry($previous);
 }
+
+function jumpNextEntry() {
+    if (! $('.current-entry').length) {
+        $nextEntry = $('.entry-row').eq(0);
+
+    } else {
+        $nextEntry = $('.current-entry').next();
+    }
+
+    if (! $nextEntry.is('.entry-row')) {
+        return;
+    }
+
+    $('.current-entry').removeClass('current-entry');
+    $nextEntry.addClass('current-entry');
+}
+
+function jumpPreviousEntry() {
+    if (! $('.current-entry').length) {
+        return
+    }
+
+    $previous = $('.current-entry').prev();
+
+    if (! $previous.is('.entry-row')) {
+        return;
+    }
+
+    $('.current-entry').removeClass('current-entry');
+    $previous.addClass('current-entry');
+}
+
 function toggleEntryAsRead($entryRow) {
     $entryRow.toggleClass('read');
 
