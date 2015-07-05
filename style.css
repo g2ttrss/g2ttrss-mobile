@@ -130,14 +130,14 @@ a.logo {
     color: #000;
     overflow: auto;
 }
-#viewer-bottom-links #mark-these-read {
+#viewer-bottom-links #load-more-items {
     color: #24b;
     text-decoration: underline;
     white-space: nowrap;
 }
-.loading #viewer-bottom-links #mark-these-read,
-.disabled-actions #viewer-bottom-links #mark-these-read,
-.empty-stream #viewer-bottom-links #mark-these-read {
+.loading #viewer-bottom-links #load-more-items,
+.disabled-actions #viewer-bottom-links #load-more-items,
+.empty-stream #viewer-bottom-links #load-more-items {
     color: #999;
     text-decoration: none;
 }

@@ -97,7 +97,7 @@ $(document).ready(function () {
 
 
     // Show more items
-    $('#show-more-row').unbind('click').click(function () {
+    $('#load-more-items').unbind('click').click(function () {
         if(pref_OrderBy == "date_reverse") {
             var last = $('.entry-row').last().attr('id');
         } else {
@@ -206,7 +206,7 @@ $(document).ready(function () {
     });
 
     // Mark all as read
-    $('#mark-these-read, #menu-mark-read').unbind('click').click(function () {
+    $('#show-more-row, #menu-mark-read').unbind('click').click(function () {
         $('body').removeClass('loaded').addClass('loading');
         $('.load-more-message').html('Marking as read...');
         //remove those that need to be kept unread
@@ -674,7 +674,7 @@ function getHeadlines(since) {
 
         // Done loading
         $('body').removeClass('loading').addClass('loaded');
-        $('.load-more-message').html('Load more items...');
+        $('.load-more-message').html('Mark these items as read');
         $('.entries-count').html('Showing ' + $('.entry-row').length + ' items');
         keepUnread.clean(global_ids);
     });
