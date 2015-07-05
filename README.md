@@ -50,8 +50,19 @@ Current features
 * login/logout support
 * load more articles (15 at a time)
 * search for keywords in feeds
+* Google Reader style hotkeys (`j`, `k`, `n`, `p`, `o`, `m`)
 
 Future features are tracked as issues.
+
+Hotkeys
+-------
+
+* `j` - Jump and expand next item.
+* `k` - Jump and expand previous item.
+* `n` - Jump to next item.
+* `p` - Jump to previous item.
+* `o` - Expand/collapse current item.
+* `m` - Mark current item as read/unread.
 
 Configuration Options
 ---------------------

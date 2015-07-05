@@ -366,6 +366,13 @@ $('.ui-loader').remove();
 
 //Added for Subscribe to New Feeds 
 
+    // Hotkeys
+    $(document).bind('keydown', 'j', expandNextEntry);
+    $(document).bind('keydown', 'k', expandPreviousEntry);
+    $(document).bind('keydown', 'n', jumpNextEntry);
+    $(document).bind('keydown', 'p', jumpPreviousEntry);
+    $(document).bind('keydown', 'o', toggleCurrentEntryAsExpanded);
+    $(document).bind('keydown', 'm', toggleCurrentEntryAsRead);
 });
 
 
