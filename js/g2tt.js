@@ -591,22 +591,7 @@ function getHeadlines(since) {
 
         // Expand an entry
         $('.entry-header-body').unbind('click').click(function () {
-            if ($(this).closest('.entry-row').hasClass('expanded')) {
-                return;
-            }
-
-            $('.expanded').removeClass('expanded');
-            $(this).closest('.entry-row').addClass('expanded');
-            $('html,body').scrollTop($(this).closest('.entry-row').offset().top);
-
-            // Mark as read
-            $(this).closest('.entry-row').addClass('read');
-            var data = new Object();
-            data.op = "updateArticle";
-            data.article_ids = $(this).closest('.entry-row').attr('id');
-            data.mode = 0;
-            data.field = 2;
-            var response = apiCall(data);
+            expandEntry($(this).closest('.entry-row'));
         });
 
         // Collapse an entry
@@ -616,7 +601,7 @@ function getHeadlines(since) {
 
         // Next entry
         $('.entry-next').unbind('click').click(function (event) {
-            $(this).closest('.entry-row').next().find('.entry-header-body').trigger('click');
+            expandEntry($(this).closest('.entry-row').next());
             event.stopPropagation();
         });
 
@@ -1223,4 +1208,23 @@ function getCategoriesForNewSubscribe() {
             
         });
 
+}
+
+function expandEntry($entryRow) {
+    if ($entryRow.hasClass('expanded')) {
+        return;
+    }
+
+    $('.expanded').removeClass('expanded');
+    $entryRow.addClass('expanded');
+    $('html,body').scrollTop($entryRow.offset().top);
+
+    // Mark as read
+    $entryRow.addClass('read');
+    var data = new Object();
+    data.op = "updateArticle";
+    data.article_ids = $entryRow.attr('id');
+    data.mode = 0;
+    data.field = 2;
+    var response = apiCall(data);
 }
