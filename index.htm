@@ -14,6 +14,7 @@
   <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
   <script type="text/javascript" src="js/jquery.cookie.js"></script>
   <!-- added for jquery dialog ui -->
+  <script type="text/javascript" src="js/jquery.hotkeys.js"></script>
   <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery.ui.all.css">
   <script type="text/javascript" src="js/g2tt-config.js"></script>
   <script type="text/javascript" src="js/g2tt.js"></script>
@@ -104,25 +105,16 @@
               </tr>
             </tbody>
           </table>
-          <table class="search-box hidden">
-            <tbody>
-              <tr>
-                <td>
-                  <div class="m-button" id="search-cancel"> <span class="m-button-contents">Cancel</span>
-                  </div>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <form id="search-form" action="">
-                    <input id="search-input" type="text" />
-                    <div class="m-button" id="search-submit"> <span class="m-button-contents"></span>
-                    </div>
-                  </form>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+          <div class="search-box hidden">
+            <form id="search-form" action="">
+              <input id="search-input" type="text" />
+              <div class="m-button" id="search-submit"> <span class="m-button-contents">Search</span>
+              </div>
+              <div class="m-button" id="search-cancel"> <span class="m-button-contents">Close</span>
+              </div>
+              <div class="clearfix"></div>
+            </form>
+          </div>
           <div id="nav-bar-shadow"></div>
         </div>
         <div id="message-area"></div>
@@ -164,7 +156,7 @@
           </div>
           <div class="g2tt-menuseparator articlesMenu" style="-webkit-user-select: none;" role="separator" id="seperator3"></div>
           <div class="g2tt-menuitem articlesMenu" role="menuitem" style="-webkit-user-select: none;" id="menu-mark-read">
-            <div class="g2tt-menuitem-content">Mark all as read</div>
+            <div class="g2tt-menuitem-content">Mark these as read</div>
           </div>
           <div class="g2tt-menuitem g2tt-option feedsItem feedsMenu hidden" role="menuitem" style="-webkit-user-select: none;" id="feeds-all">
             <div class="g2tt-menuitem-content">
@@ -201,7 +193,7 @@
           </div>
         </div>
         <div id="viewer-bottom-links">
-          <div id="viewer-bottom-right" class="nav-right"> <span id="mark-these-read" class="">Mark these items as read</span>
+          <div id="viewer-bottom-right" class="nav-right"> <span id="load-more-items" class="">Load more items</span>
           </div>
         </div>
         <div id="entries-footer" class="nav-bar">

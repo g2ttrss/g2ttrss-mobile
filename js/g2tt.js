@@ -97,7 +97,7 @@ $(document).ready(function () {
 
 
     // Show more items
-    $('#show-more-row').unbind('click').click(function () {
+    $('#load-more-items').unbind('click').click(function () {
         if(pref_OrderBy == "date_reverse") {
             var last = $('.entry-row').last().attr('id');
         } else {
@@ -206,7 +206,7 @@ $(document).ready(function () {
     });
 
     // Mark all as read
-    $('#mark-these-read, #menu-mark-read').unbind('click').click(function () {
+    $('#show-more-row, #menu-mark-read').unbind('click').click(function () {
         $('body').removeClass('loaded').addClass('loading');
         $('.load-more-message').html('Marking as read...');
         //remove those that need to be kept unread
@@ -257,12 +257,14 @@ $(document).ready(function () {
         if(e.which == 13) {
             jQuery(this).blur();
             jQuery('#search-submit').focus().click();
+            return false;
         }
     });
     // Remove currently displayed headlines and search
     $('#search-submit').unbind('click').click(function () {
         $('#entries').empty();
         getHeadlines();
+        return false;
     });
 
     load();
@@ -366,6 +368,13 @@ $('.ui-loader').remove();
 
 //Added for Subscribe to New Feeds 
 
+    // Hotkeys
+    $(document).bind('keydown', 'j', expandNextEntry);
+    $(document).bind('keydown', 'k', expandPreviousEntry);
+    $(document).bind('keydown', 'n', jumpNextEntry);
+    $(document).bind('keydown', 'p', jumpPreviousEntry);
+    $(document).bind('keydown', 'o', toggleCurrentEntryAsExpanded);
+    $(document).bind('keydown', 'm', toggleCurrentEntryAsRead);
 });
 
 
@@ -572,7 +581,7 @@ function getHeadlines(since) {
             <div class='entry-footer'> \
             <div class='entry-actions'> \
             <div class='entry-actions-primary'> \
-            <i class='fa fa-square-o read-state link unselectable' title='Mark as read'>&nbsp;Mark as read</i> \
+            <i class='fa fa-envelope-o read-state link unselectable' title='Toggle read'>&nbsp;Toggle read</i> \
             <span class='link unselectable' title='Sent by mail'> \
             <i class='fa fa-envelope-o' style='vertical-align:top;'></i> \
             <a class='link unselectable' href='mailto:?subject=" + encodeURIComponent(email_subject) + "&body=" + encodeURIComponent(email_body) + "'>E-Mail</a> \
@@ -591,61 +600,23 @@ function getHeadlines(since) {
 
         // Expand an entry
         $('.entry-header-body').unbind('click').click(function () {
-            if ($(this).closest('.entry-row').hasClass('expanded')) {
-                return;
-            }
-
-            $('.expanded').removeClass('expanded');
-            $(this).closest('.entry-row').addClass('expanded');
-            $('html,body').scrollTop($(this).closest('.entry-row').offset().top);
-
-            // Mark as read
-            $(this).closest('.entry-row').addClass('read');
-            $(this).closest('.entry-row').find('.read-state').addClass('fa-check-square-o').removeClass('fa-square-o');
-            var data = new Object();
-            data.op = "updateArticle";
-            data.article_ids = $(this).closest('.entry-row').attr('id');
-            data.mode = 0;
-            data.field = 2;
-            var response = apiCall(data);
+            expandEntry($(this).closest('.entry-row'));
         });
 
         // Collapse an entry
         $('.entry-top-bar').unbind('click').click(function () {
-            $(this).closest('.entry-row').removeClass('expanded');
+            collapseEntry($(this).closest('.entry-row'));
         });
 
         // Next entry
         $('.entry-next').unbind('click').click(function (event) {
-            $(this).closest('.entry-row').next().find('.entry-header-body').trigger('click');
+            expandEntry($(this).closest('.entry-row').next());
             event.stopPropagation();
         });
 
         // Toggle read
         $('.read-state').unbind('click').click(function () {
-            $(this).closest('.entry-row').toggleClass('read');
-            $(this).toggleClass('fa-check-square-o').toggleClass('fa-square-o');
-
-            if ($(this).hasClass('fa-square-o')) {
-                for (var i = 0; i < global_ids.length; i++) {
-                    var articleId = $(this).closest('.entry-row').attr('id');
-                    if (global_ids[i] == articleId) {
-                        global_ids.splice(i,1);
-                        keepUnread.addId(articleId);
-                    }
-                }
-            } else {
-                var articleId = $(this).closest('.entry-row').attr('id');
-                global_ids.push(articleId);
-                keepUnread.removeId(articleId);
-            }
-
-            var data = new Object();
-            data.op = "updateArticle";
-            data.article_ids = $(this).closest('.entry-row').attr('id');
-            data.mode = 2;
-            data.field = 2;
-            var response = apiCall(data);
+            toggleEntryAsRead($(this).closest('.entry-row'));
         });
 
         /*
@@ -676,7 +647,7 @@ function getHeadlines(since) {
 
         // Done loading
         $('body').removeClass('loading').addClass('loaded');
-        $('.load-more-message').html('Load more items...');
+        $('.load-more-message').html('Mark these items as read');
         $('.entries-count').html('Showing ' + $('.entry-row').length + ' items');
         keepUnread.clean(global_ids);
     });
@@ -1225,4 +1196,163 @@ function getCategoriesForNewSubscribe() {
             
         });
 
+}
+
+function expandEntry($entryRow) {
+    if ($entryRow.hasClass('expanded')) {
+        return;
+    }
+
+    $('.expanded').removeClass('expanded');
+    $entryRow.addClass('expanded');
+    $('html,body').scrollTop($entryRow.offset().top);
+
+    $('.current-entry').removeClass('current-entry');
+    $entryRow.addClass('current-entry');
+
+    // Mark as read
+    if (! $entryRow.hasClass('read')) {
+        $entryRow.addClass('read');
+        var data = new Object();
+        data.op = "updateArticle";
+        data.article_ids = $entryRow.attr('id');
+        data.mode = 0;
+        data.field = 2;
+        var response = apiCall(data);
+    }
+}
+
+function collapseEntry($entryRow) {
+    $entryRow.removeClass('expanded');
+}
+
+function toggleEntryAsExpanded($entryRow) {
+    if ($entryRow.hasClass('expanded')) {
+        collapseEntry($entryRow);
+
+    } else {
+        expandEntry($entryRow);
+    }
+}
+
+function toggleCurrentEntryAsExpanded($entryRow) {
+    if ($('.current-entry').length) {
+        toggleEntryAsExpanded($('.current-entry'));
+    }
+}
+
+function expandNextEntry() {
+    if (! $('.current-entry').length) {
+        $nextEntry = $('.entry-row').eq(0);
+
+    } else {
+        $nextEntry = $('.current-entry').next();
+    }
+
+    if (! $nextEntry.is('.entry-row')) {
+        return;
+    }
+
+    expandEntry($nextEntry);
+}
+
+function expandPreviousEntry() {
+    if (! $('.current-entry').length) {
+        return
+    }
+
+    $previous = $('.current-entry').prev();
+
+    if (! $previous.is('.entry-row')) {
+        return;
+    }
+
+    expandEntry($previous);
+}
+
+function jumpNextEntry() {
+    if (! $('.current-entry').length) {
+        $nextEntry = $('.entry-row').eq(0);
+
+    } else {
+        $nextEntry = $('.current-entry').next();
+    }
+
+    if (! $nextEntry.is('.entry-row')) {
+        return;
+    }
+
+    $('.current-entry').removeClass('current-entry');
+    $nextEntry.addClass('current-entry');
+
+    if (! isElementInViewport($('.current-entry'))) {
+        $('.current-entry')[0].scrollIntoView(false);
+    }
+}
+
+function jumpPreviousEntry() {
+    if (! $('.current-entry').length) {
+        return
+    }
+
+    $previous = $('.current-entry').prev();
+
+    if (! $previous.is('.entry-row')) {
+        return;
+    }
+
+    $('.current-entry').removeClass('current-entry');
+    $previous.addClass('current-entry');
+
+    if (! isElementInViewport($('.current-entry'))) {
+        $('.current-entry')[0].scrollIntoView();
+    }
+}
+
+function toggleEntryAsRead($entryRow) {
+    $entryRow.toggleClass('read');
+
+    if (! $(this).hasClass('read')) {
+        for (var i = 0; i < global_ids.length; i++) {
+            var articleId = $entryRow.attr('id');
+            if (global_ids[i] == articleId) {
+                global_ids.splice(i,1);
+                keepUnread.addId(articleId);
+            }
+        }
+    } else {
+        var articleId = $entryRow.attr('id');
+        global_ids.push(articleId);
+        keepUnread.removeId(articleId);
+    }
+
+    var data = new Object();
+    data.op = "updateArticle";
+    data.article_ids = $entryRow.attr('id');
+    data.mode = 2;
+    data.field = 2;
+    var response = apiCall(data);
+}
+
+function toggleCurrentEntryAsRead($entryRow) {
+    if ($('.current-entry').length) {
+        toggleEntryAsRead($('.current-entry'));
+    }
+}
+
+// source: http://stackoverflow.com/a/7557433/1135429
+function isElementInViewport (el) {
+    //special bonus for those using jQuery
+    if (typeof jQuery === "function" && el instanceof jQuery) {
+        el = el[0];
+    }
+
+    var rect = el.getBoundingClientRect();
+
+    return (
+        rect.top >= 0 &&
+        rect.left >= 0 &&
+        rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) && /*or $(window).height() */
+        rect.right <= (window.innerWidth || document.documentElement.clientWidth) /*or $(window).width() */
+    );
 }

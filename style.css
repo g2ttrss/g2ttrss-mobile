@@ -130,14 +130,14 @@ a.logo {
     color: #000;
     overflow: auto;
 }
-#viewer-bottom-links #mark-these-read {
+#viewer-bottom-links #load-more-items {
     color: #24b;
     text-decoration: underline;
     white-space: nowrap;
 }
-.loading #viewer-bottom-links #mark-these-read,
-.disabled-actions #viewer-bottom-links #mark-these-read,
-.empty-stream #viewer-bottom-links #mark-these-read {
+.loading #viewer-bottom-links #load-more-items,
+.disabled-actions #viewer-bottom-links #load-more-items,
+.empty-stream #viewer-bottom-links #load-more-items {
     color: #999;
     text-decoration: none;
 }
@@ -347,9 +347,9 @@ a:visited,
     -webkit-transition-property: none;
     -webkit-transition-duration: 0;
 }
-.expanded .entry-container { border-color: #3162c4 }
 .expanded .entry-container .entry-header-body { background-color: #fff }
 .expanded .entry-container .entry-header-body .text { padding-bottom: 0 }
+.current-entry .entry-container { border-color: #3162c4 }
 .entry-container .entry-header-body { padding-left: 25px }
 .entry-container .entry-header { position: relative }
 .entry-footer {
@@ -399,14 +399,11 @@ a:visited,
 }
 
 .entry-actions .read-state {
-    padding: 0 8px 0 5px;
+    padding: 0 8px 0 17px;
     position: relative;
-    float: left;
     vertical-align: top;
     line-height: 15px;
     white-space: nowrap;
-    width: 95px;
-text-align: right;
 }
 
 .expanded .entry-top-bar .entry-next-icon,
@@ -694,22 +691,21 @@ position:absolute;
 .nav-bar .search-box { width: 100% }
 .search-box #search-input,
 .search-box #search-submit,
-.search-box #search-cancel { vertical-align: middle }
-.search-box #search-input {
-    left: 4px;
-    padding: 3px;
-    right: 45px;
-    margin: 1px 0 0 2px;
+.search-box #search-cancel {
     float: left;
-    position: absolute;
-/*    height: 16pt; */
+}
+.search-box #search-input {
+    padding: 3px;
+    margin: 1px 5px 0 2px;
+    height: 30px; 
+    border: 1px solid #98A5B1;
+    border-radius: 3px;
     font-size: 14pt;
 }
 .search-box #search-submit {
     display: block;
-    float: right;
+    margin-right: 20px;
     background-position: -5px -296px;
-    width: 16px;
 }
 .search,
 .search-results { padding: 8px 5px }
