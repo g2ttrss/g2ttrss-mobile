@@ -24,9 +24,10 @@ How to use it?
 
 You should install the files in a directory on the same host as your TT-RSS install.
 As the webapp uses AJAX calls to access the API, it should be hosted on the **same domain name**.
-G2TTRSS assumes that it is installed in a subdirectory of TT-RSS, if this is not the case
-edit `js/g2tt-config.js` and change `global_ttrssUrl` to point to the correct location.
-If the webapp is installed in a subdirectory of TT-RSS, be careful not to wipe it on an update to TT-RSS.
+G2TTRSS assumes that your TT-RSS install is located at `<your-domain>/tt-rss`, if this is not the case
+edit `js/g2tt-config.js` and change `global_ttrssUrl` (line 2) to point to the correct location.
+If the webapp is installed in a subdirectory of TT-RSS, it could be wiped on an update to TT-RSS
+so after each update of TT-RSS, you may need to reinstall G2TTRSS.
 
 Use of this webapp requires TT-RSS's external APIs. They are enabled through TT-RSS's preferences:
  * in *Tiny Tiny RSS* go into `Actions` -> `Preferences`
