@@ -581,7 +581,7 @@ function getHeadlines(since) {
             <div class='entry-footer'> \
             <div class='entry-actions'> \
             <div class='entry-actions-primary'> \
-            <i class='fa fa-envelope-o read-state link unselectable' title='Toggle read'>&nbsp;Toggle read</i> \
+            <i class='fa fa-book read-state link unselectable' title='Toggle read'>&nbsp;Mark unread</i> \
             <span class='link unselectable' title='Sent by mail'> \
             <i class='fa fa-envelope-o' style='vertical-align:top;'></i> \
             <a class='link unselectable' href='mailto:?subject=" + encodeURIComponent(email_subject) + "&body=" + encodeURIComponent(email_body) + "'>E-Mail</a> \
@@ -1312,7 +1312,8 @@ function jumpPreviousEntry() {
 function toggleEntryAsRead($entryRow) {
     $entryRow.toggleClass('read');
 
-    if (! $(this).hasClass('read')) {
+    if (! $entryRow.hasClass('read')) {
+        $entryRow.find(".read-state").html("&nbsp;Mark read");
         for (var i = 0; i < global_ids.length; i++) {
             var articleId = $entryRow.attr('id');
             if (global_ids[i] == articleId) {
@@ -1321,6 +1322,7 @@ function toggleEntryAsRead($entryRow) {
             }
         }
     } else {
+        $entryRow.find(".read-state").html("&nbsp;Mark unread");
         var articleId = $entryRow.attr('id');
         global_ids.push(articleId);
         keepUnread.removeId(articleId);
